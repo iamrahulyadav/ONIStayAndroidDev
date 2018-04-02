@@ -178,6 +178,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                         showAlertMessage = new showAlertMessage(getApplicationContext(), "Please select duration", "info");
                     }else {
                         switch (position){
+                            //to update outTime
                             case 1:
                                 if(mMonth >10){
                                     updateDisplayOut(0,mYear+1);
