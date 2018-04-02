@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/grey">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/red"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        >
+        <ImageView
+            android:id="@+id/crossImageView"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/arrow_black"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/saveImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="Save"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/mediumFontL" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:text="Add New Address"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/mediumFontL"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:layout_margin="15dp"
+        android:background="@drawable/border">
+
+        <EditText
+            android:id="@+id/address1EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/address"
+            android:theme="@style/EditTextTheme"
+            android:textSize="@dimen/mediumFont" />
+
+        <EditText
+            android:id="@+id/pinCodeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/pincode"
+            android:theme="@style/EditTextTheme"
+            android:textSize="@dimen/mediumFont" />
+        <EditText
+            android:id="@+id/phoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="@string/phone"
+            android:theme="@style/EditTextTheme"
+            android:textSize="@dimen/mediumFont" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="100dp"
+
+                android:layout_height="wrap_content"
+                android:text="State"
+                android:textSize="@dimen/mediumFont" />
+
+            <Spinner
+                android:id="@+id/spinnerState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/country_array" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="City"
+                android:textSize="@dimen/mediumFont" />
+
+            <Spinner
+                android:id="@+id/spinnerCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Adress Type"
+            android:textSize="@dimen/mediumFont" />
+
+            <RadioGroup
+                android:id="@+id/typeAddressRadioGroup"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+            <RadioButton
+                android:text="Home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/red_trans" />
+
+
+            <RadioButton
+                android:text="Office/Commercial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/red_trans" />
+
+            </RadioGroup>
+        <Button
+            android:id="@+id/default_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/transparent"
+            android:layout_gravity="center"
+            android:text="Make this my default address"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

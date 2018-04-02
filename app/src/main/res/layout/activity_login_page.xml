@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.codemaven3015.onistayandroiddev.Login_page">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="80dp"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <ImageView
+                android:id="@+id/login_imageview"
+                android:layout_width="50dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:paddingLeft="5dp"
+                app:srcCompat="@drawable/india_flag" />
+
+            <TextView
+                android:id="@+id/login_textview"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:gravity="center"
+                android:text="+91"
+
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/login_editText"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ffffff"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="Mobile Number"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textSize="@dimen/mediumFont" />
+
+            <Button
+                android:id="@+id/login_verifybutton"
+                android:layout_width="140dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/red_trans"
+                android:text="VERIFY"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/mediumFontL" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/login_verifyTextview"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/linearLayout"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="@string/verify"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/login_referalBtn"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/login_verifyTextview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_bg_color"
+            android:paddingTop="5dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="0.02"
+            android:text="@string/referal"
+            android:textColor="@color/red"
+            android:textSize="@dimen/smallFont" />
+
+        <EditText
+            android:id="@+id/login_referalEditText"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_alignStart="@+id/login_referalBtn"
+            android:layout_below="@+id/login_referalBtn"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_bg"
+            android:ems="10"
+            android:hint="@string/enter_referal"
+            android:inputType="phone"
+            android:paddingTop="5dp"
+            android:shadowColor="#000000"
+            android:shadowRadius="0.02"
+            android:textAlignment="center"
+            android:textColor="@color/red_trans"
+            android:textSize="15sp"
+            android:textStyle="italic" />
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

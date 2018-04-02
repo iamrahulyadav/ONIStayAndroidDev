@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/grey">
+
+    <RelativeLayout
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingRight="20dp"
+        android:paddingLeft="20dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD NEW ADDRESS"
+            android:textStyle="bold"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/mediumFontL"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/addAddress"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/plus" />
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/address_recycler_view"
+        android:background="@color/transparent"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>
+
+</LinearLayout>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/Profile_circleRelativeLayout"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+
+                android:background="@drawable/circle">
+            <ImageView
+                android:id="@+id/upload_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/uploadphoto" />
+        </RelativeLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="20dp"
+                    android:text="First Name"
+                    android:textSize="@dimen/smallFontL"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:inputType="textPersonName"
+                    android:theme="@style/EditTextTheme" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="20dp"
+                    android:text="Last Name"
+                    android:textSize="@dimen/smallFontL" />
+
+                <EditText
+                    android:id="@+id/editTextLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:inputType="textPersonName"
+                    android:theme="@style/EditTextTheme" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text="Email"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/smallFontL"/>
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:theme="@style/EditTextTheme"
+            android:inputType="textEmailAddress"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+
+            android:textSize="@dimen/smallFontL"
+            android:text="Mobile Number"/>
+        <EditText
+            android:id="@+id/editTextMobile"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:maxLength="10"
+            android:theme="@style/EditTextTheme"
+            android:inputType="phone"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:text="Date of Birth"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/smallFontL"/>
+        <EditText
+            android:id="@+id/editTextDoB"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:theme="@style/EditTextTheme"
+            android:inputType="date"
+            />
+        <RadioGroup
+            android:id="@+id/radioGroupGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/smallFontL">
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Male"/>
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
+            <RadioButton
+                android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"/>
+        </RadioGroup>
+        <Button
+            android:layout_marginTop="30dp"
+            android:id="@+id/submitButton"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:background="@color/yellow"
+            android:text="EDIT"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/largeFont" />
+    </LinearLayout>
+</ScrollView>
+
+</LinearLayout>

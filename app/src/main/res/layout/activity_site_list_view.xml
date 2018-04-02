@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.codemaven3015.onistayandroiddev.Site_listView">
+    <android.support.v7.widget.Toolbar
+        android:layout_marginTop="10dp"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        android:contentInsetRight="0dp"
+        android:contentInsetEnd="0dp"
+        app:contentInsetRight="0dp"
+        app:contentInsetEnd="0dp">
+
+        <include
+            layout="@layout/tool_bar" />
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_view"
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"/>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/offer_linearLayout"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/offer_imageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/menubar" />
+
+                <Button
+                    android:id="@+id/offer_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="OFFER"
+                    android:layout_marginLeft="5dp"
+                    android:textAlignment="viewStart"
+                    android:background="@color/transparent"
+                    android:textSize="@dimen/mediumFont"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/sort_linearLayout"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/sort_imageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/sort_icon" />
+
+                <Button
+                    android:id="@+id/sort_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="SORT"
+                    android:layout_marginLeft="5dp"
+                    android:textAlignment="viewStart"
+                    android:background="@color/transparent"
+                    android:textSize="@dimen/mediumFont"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="30dp">
+
+                <ImageView
+                    android:id="@+id/filter_imageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/filter" />
+
+                <Button
+                    android:id="@+id/filter_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="FILTER"
+                    android:layout_marginLeft="5dp"
+                    android:textAlignment="viewStart"
+                    android:background="@color/transparent" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

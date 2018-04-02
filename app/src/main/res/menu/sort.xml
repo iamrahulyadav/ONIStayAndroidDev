@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+        <group android:id="@+id/first_section" android:checkableBehavior="all">
+        <item
+            android:id="@+id/featured_property"
+            android:icon="@drawable/featuredproperty"
+            android:title="Featured Property" />
+        </group>
+        <group android:id="@+id/first_section1" android:checkableBehavior="all">
+        <item
+            android:id="@+id/high_to_low"
+            android:icon="@drawable/high_to_low"
+            android:title="Prices High to Low" />
+        </group>
+        <group android:id="@+id/first_section2" android:checkableBehavior="all">
+        <item
+            android:id="@+id/low_to_high"
+            android:icon="@drawable/low_to_high"
+            android:title="Prices Low to High" />
+        </group>
+        <group android:id="@+id/first_section3" android:checkableBehavior="all">
+        <item
+            android:id="@+id/discount"
+            android:icon="@drawable/discount_icon"
+            android:title="Discount" />
+        </group>
+        <group android:id="@+id/first_section4" android:checkableBehavior="all">
+        <item
+            android:id="@+id/distance"
+            android:icon="@drawable/distance"
+            android:title="Distance" />
+        </group>
+
+</menu>

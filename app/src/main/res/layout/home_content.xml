@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:grid="http://schemas.android.com/tools">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/home_firstImage"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:src="@drawable/hotel4"
+                android:scaleType="fitXY"
+                android:layout_alignParentTop="true"/>
+
+            <LinearLayout
+                android:id="@+id/red_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/home_firstImage"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/greeting_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="20dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/red"
+                    android:textStyle="italic" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/Location_Btn"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/button_bg_color"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/location" />
+
+                    <SearchView
+                        android:layout_width="180dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/button_bg_color"
+                        android:queryHint="Where you want to stay"></SearchView>
+
+                    <Button
+                        android:id="@+id/City_Btn"
+                        android:layout_width="90dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_bg_color"
+                        android:text="All Cities"
+                        android:textAlignment="center"
+                        android:padding="5dp"
+                        android:textColor="@color/red_trans"
+                        android:textSize="@dimen/smallFontL"></Button>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_bg_color"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/SearchFor_sppiner"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:entries="@array/Search"
+
+                        android:paddingLeft="5dp"></Spinner>
+
+                    <Spinner
+                        android:id="@+id/searchCity_spinner"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+
+                        android:entries="@array/city"></Spinner>
+
+                    <ImageButton
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/badge_circle"
+                        android:paddingRight="10dp"
+                        android:padding="10dp"
+                        android:scaleType="fitCenter"
+                        card_view:srcCompat="@drawable/red_search" />
+                </LinearLayout>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/textview_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/red_box"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="ONI STAYS SERVICES"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/servicesRecyclerView"
+                android:layout_below="@+id/textview_services"
+                android:scrollbars="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+            <View
+                android:id="@+id/lineSeprator"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/servicesRecyclerView"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/dark_grey" />
+            <TextView
+                android:id="@+id/textview_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lineSeprator"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="Product Featured"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/product_RecyclerView"
+                android:layout_below="@+id/textview_product"
+                android:scrollbars="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+            <View
+                android:id="@+id/lineSeprator2"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/product_RecyclerView"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/dark_grey" />
+            <TextView
+                android:id="@+id/textview_offers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lineSeprator2"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="OFFERS"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+            <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/offerRecyclerView"
+                android:layout_below="@+id/textview_offers"
+                android:scrollbars="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+            <View
+                android:id="@+id/lineSeprator3"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@+id/offerRecyclerView"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/dark_grey" />
+            <TextView
+                android:id="@+id/textview_deals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lineSeprator3"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="DEALS FOR YOU"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <include layout="@layout/deals_grid"
+                android:layout_below="@+id/textview_deals"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+        </RelativeLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
