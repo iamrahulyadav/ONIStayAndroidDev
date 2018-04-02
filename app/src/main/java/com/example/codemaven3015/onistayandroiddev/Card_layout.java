@@ -19,35 +19,28 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Admin on 1/25/2018.
  */
 public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     private Context context;
     private  String fromWhere;
+    private JSONArray list;
 
 
 
-    public Card_layout(Context context,String fromWhere) {
+    public Card_layout(Context context,String fromWhere,JSONArray list) {
         this.context = context;
         this.fromWhere = fromWhere;
+        this.list = list;
     }
-
-    private int[] images = {
-            R.drawable.hotel1,
-            R.drawable.hotel2,
-            R.drawable.hotel3,
-            R.drawable.hotel4,
-            R.drawable.hotel5,
-            R.drawable.hotel6,
-    };
-    private String[] price = {"₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999"};
-    private String[] hotel = {"Chapter One",
-            "Chapter Two",
-            "Chapter Three",
-            "Chapter Four",
-            "Chapter Five",
-            "Chapter Six"};
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,9 +72,25 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
                 fav_imageBtn.setVisibility(View.VISIBLE);
                 show_imageBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.eye));
                 wish_butn.setVisibility(View.GONE);
+                show_imageBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(context,Site_Image_View.class);
+                        i.putExtra("IN_VIEW_IMAGE","false");
+                        context.startActivity(i);
+                    }
+                });
             }else if(fromWhere.equals("Wishlist")){
                 fav_imageBtn.setVisibility(View.GONE);
                 show_imageBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.remove_wishlist));
+                show_imageBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final int position = getAdapterPosition();
+                        delete(position);
+                    }
+
+                });
                 wish_butn.setVisibility(View.VISIBLE);
             }
             fav_imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,15 +131,13 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
                 }
             });
             //show_imageBtn=itemView.findViewById(R.id.show_imageBtn);
-            show_imageBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context,Site_Image_View.class);
-                    i.putExtra("IN_VIEW_IMAGE","false");
-                    context.startActivity(i);
-                }
-            });
+
         }
+    }
+    public void delete(int position)
+    {
+        list.remove(position);
+        notifyItemRemoved(position);
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -142,10 +149,17 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     }
 
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        viewHolder.hotel_image.setBackgroundResource(images[i]);
-        viewHolder.price_textView.setText(price[i]);
-        viewHolder.price_textView.setPaintFlags(viewHolder.price_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        viewHolder.hotel_textView.setText(hotel[i]);
+        try {
+            JSONObject obj = list.getJSONObject(i);
+            viewHolder.hotel_image.setBackgroundResource(obj.getInt("image"));
+            viewHolder.price_textView.setText(obj.getString("price"));
+            viewHolder.price_textView.setPaintFlags(viewHolder.price_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            viewHolder.hotel_textView.setText(obj.getString("hotel"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         viewHolder.hotel_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,7 +189,7 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     }
     @Override
     public int getItemCount() {
-        return images.length;
+        return list.length();
     }
 }
 

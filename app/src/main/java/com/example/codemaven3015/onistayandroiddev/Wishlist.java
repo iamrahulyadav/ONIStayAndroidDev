@@ -13,6 +13,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Wishlist extends AppCompatActivity {
     RecyclerView Wishlist_recycler_view;
     Card_layout adapter;
@@ -53,8 +57,38 @@ public class Wishlist extends AppCompatActivity {
         Wishlist_recycler_view = findViewById(R.id.Wishlist_recycler_view);
         Wishlist_recycler_view.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(this);
-              Wishlist_recycler_view.setLayoutManager(layoutManager);
-        adapter=new Card_layout(this,"Wishlist");
+        Wishlist_recycler_view.setLayoutManager(layoutManager);
+
+        int[] images = {
+                R.drawable.hotel1,
+                R.drawable.hotel2,
+                R.drawable.hotel3,
+                R.drawable.hotel4,
+                R.drawable.hotel5,
+                R.drawable.hotel6
+        };
+        String[] price = {"₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999"};
+        String[] hotel = {"Chapter One",
+                "Chapter Two",
+                "Chapter Three",
+                "Chapter Four",
+                "Chapter Five",
+                "Chapter Six"};
+        JSONArray list = new JSONArray();
+        for(int i = 0;i<6;i++){
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("image",images[i]);
+                obj.put("price",price[i]);
+                obj.put("hotel",hotel[i]);
+                list.put(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+        adapter=new Card_layout(this,"Wishlist",list);
         Wishlist_recycler_view.setItemAnimator(new DefaultItemAnimator());
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         Wishlist_recycler_view.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"list"));

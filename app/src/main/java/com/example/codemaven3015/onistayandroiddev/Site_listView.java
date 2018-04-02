@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.cocosw.bottomsheet.BottomSheet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Site_listView extends AppCompatActivity {
@@ -75,7 +79,36 @@ public class Site_listView extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter=new Card_layout(this,"SiteList");
+        int[] images = {
+                R.drawable.hotel1,
+                R.drawable.hotel2,
+                R.drawable.hotel3,
+                R.drawable.hotel4,
+                R.drawable.hotel5,
+                R.drawable.hotel6
+        };
+         String[] price = {"₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999"};
+         String[] hotel = {"Chapter One",
+                "Chapter Two",
+                "Chapter Three",
+                "Chapter Four",
+                "Chapter Five",
+                "Chapter Six"};
+        JSONArray list = new JSONArray();
+        for(int i = 0;i<6;i++){
+            JSONObject obj = new JSONObject();
+            try {
+                obj.put("image",images[i]);
+                obj.put("price",price[i]);
+                obj.put("hotel",hotel[i]);
+                list.put(obj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+        adapter=new Card_layout(this,"SiteList",list);
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"list"));
         recyclerView.setAdapter(adapter);
