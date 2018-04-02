@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name">ONIStayAndroidDev</string>
+    <string name="verify">5 Digit Verification Code Will be sent via SMS to verify your mobile number</string>
+    <string name="sorry">Sorry!\n Incorrect Referal Code</string>
+    <string name="referal">Having a Referal Code ?</string>
+    <string name="enter_referal">Enter Your Referal Code!</string>
+    <string name="title_activity_all_locations"> </string>
+    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_close">close</string>
+    <string name="ID"> • Guests needd to carry valid address and ID proof.</string>
+    <string name="Guest_Policy"> By procceeding, you agree to our </string>
+    <string name="name">Enter Your Name</string>
+    <string name="email">Enter Your Email Address</string>
+    <string name="phone">Enter Your Phone number</string>
+    <string name="IDcard">ID Card</string>
+    <string name="Bdy">Birthday</string>
+
+    <string name="address">Address</string>
+    <string name="pincode">Pin Code*</string>
+    <string name="title_activity_pay_now">PayNow</string>
+    <string name="booking_confirmation"> YaY! Your booking is Confirmed</string>
+    <string name="order_Id"> Order Id :- </string>
+    <string name="hotel_Name">ONISTAYS Romantic Red Tower</string>
+    <string name="hotel_address">Ashok Nagar, New Delhi</string>
+
+    <string name="date">Fri 9th Feb 2018</string>
+    <string name="stay_period">Stay Period :-</string>
+    <string name="payment_amount">Total Payment Amount :- </string>
+    <string name="mistake">Booking done by Mistake</string>
+    <string name="different_stay">Want to book different stay</string>
+    <string name="better_deal">Got a better deal</string>
+    <string name="issue">Cancel Booking</string>
+    <string name="cancel">Cancel This Booking</string>
+
+    <string name="booked_date">Mon 6th Feb 2018</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_booking_tabbed">BookingTabbed</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="refer_code">"REFERRALS /n You and your buddy Rs. 500off."</string>
+
+
+    <string-array name="country_array">
+        <item>Delhi</item>
+        <item>Punjab</item>
+        <item>Uttarpardesh</item>
+    </string-array>
+
+    <string-array name="city_Delhi">
+
+        <item>Laxmi Nagar</item>
+
+        <item>Ashok Nagar</item>
+
+        <item>Chandni Chok</item>
+
+        <item>Mayur Vihar</item>
+
+    </string-array>
+
+    <string-array name="city_Punjab">
+
+        <item>Amritsar</item>
+
+        <item>Ludhiyana</item>
+
+        <item>Ambala</item>
+
+        <item>Jalandhar</item>
+
+    </string-array>
+
+    <string-array name="city_Uttarpardesh">
+
+        <item>Noida</item>
+
+        <item>Luckhnow</item>
+
+        <item>Kanpur</item>
+
+        <item>Saharanpur</item>
+
+    </string-array>
+
+    <string-array name="city">
+        <item>Cities</item>
+        <item>Agra</item>
+        <item>Ajmer</item>
+        <item>Bareli</item>
+        <item>Patna</item>
+        <item>Noida</item>
+        <item>Delhi</item>
+
+    </string-array>
+
+    <string-array name="Search">
+        <item>Seach For</item>
+        <item>Boys</item>
+        <item>Girls</item>
+    </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="offer_onicredit">Benifits and offer on using Oni Credits.</string>
+    <string name="total_balance">Total available balance :-</string>
+    <string name="Please_read1"> * Oni Credits can not be cancelled or transfered to another accounts.</string>
+    <string name="Please_read2"> * If can not be withdrawn in the form of cash or transfered to any A/C.</string>
+    <string name="Please_read3"> * Credeits have an expiry.</string>
+    <string name="title_activity_user_registration">UserRegistration</string>
+    <string name="tab_text_1">PROFILE</string>
+    <string name="tab_text_2">ADDRESS</string>
+    <string name="tab_text_3">ID CARD</string>
+
+</resources>

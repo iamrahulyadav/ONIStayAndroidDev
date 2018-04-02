@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/linearLayoutList">
+    <LinearLayout
+        android:id="@+id/linearLayout_image_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+        <ImageView
+            android:id="@+id/imgList"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/featured_icon"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            />
+
+        <TextView
+            android:paddingLeft="20dp"
+            android:id="@+id/txtList"
+            android:text="kdnkj"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="@dimen/mediumFont"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notification_lineraLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#B3ffffff"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/notification_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Congo! your request has been send...." />
+
+        <ImageView
+            android:id="@+id/notification_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/location" />
+    </LinearLayout>
+</LinearLayout>
