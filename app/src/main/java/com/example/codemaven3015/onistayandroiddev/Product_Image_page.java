@@ -96,11 +96,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         });
 
 //for STAY DURATION
-        getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
-        getMonth_Spinner.setOnItemSelectedListener(this);
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,country);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        getMonth_Spinner.setAdapter(aa);
+        setDurationSpinner();
 // FOR RATING BUTTON
         rating_imgbtn = findViewById(R.id.rating_imgbtn);
         rating_imgbtn.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +118,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         getMonth_textView=findViewById(R.id.getMonth_textView);
         getDropOut_textView=findViewById(R.id.getDropOut_textView);
         getDropIn_imgBtn=findViewById(R.id.getDropIn_imgBtn);
-        updateDisplayOut();
+        //updateDisplayOut();
         updateDisplay();
         getDropIn_imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +164,71 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new myTimerTask(), 4000 ,4000);
     }
+    public void setDurationSpinner(){
+        getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
+        getMonth_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = parent.getItemAtPosition(position).toString();
+                showAlertMessage showAlertMessage;
+                if (getDropIn_textView.getText().toString().isEmpty()) {
+                    showAlertMessage = new showAlertMessage(getApplicationContext(), "Please select DropIn Date ", "info");
+                } else {
+                    if (text.toLowerCase().equals("select")) {
+                        showAlertMessage = new showAlertMessage(getApplicationContext(), "Please select duration", "info");
+                    }else {
+                        switch (position){
+                            case 1:
+                                if(mMonth >10){
+                                    updateDisplayOut(0,mYear+1);
+                                }else {
+                                    updateDisplayOut(mMonth+1,mYear);
+                                }
+
+                                break;
+                            case 2:
+                                if(mMonth >8){
+                                    updateDisplayOut(11 - (mMonth +3),mYear+1);
+                                }else {
+                                    updateDisplayOut((mMonth +3),mYear);
+                                }
+
+                                break;
+                            case 3:
+                                if(mMonth >5){
+
+                                    updateDisplayOut(11 - (mMonth +6),mYear+1);
+                                }else {
+                                    updateDisplayOut((mMonth +6),mYear);
+                                }
+                                break;
+                            case 4:
+                                if(mMonth >2){
+                                    updateDisplayOut((11 - (mMonth +9)),mYear+1);
+                                }else {
+                                    updateDisplayOut((mMonth +9),mYear);
+                                }
+                                break;
+                            case 5:
+                                updateDisplayOut((mMonth),mYear+1);
+
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item,country);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        getMonth_Spinner.setAdapter(aa);
+    }
+
     private void setFavButton()
     {
         final ImageButton fav_imageBtn =(ImageButton)findViewById(R.id.fav_imageBtn);
@@ -294,13 +355,13 @@ public void navigateToView(){
         }
         return null;
     }
-    private void updateDisplayOut() {
+    private void updateDisplayOut(int month, int year) {
         getDropOut_textView.setText(
                 new StringBuilder()
                         // Month is 0 based so add 1
                         .append(mDay).append("-")
-                        .append(mMonth + 1).append("-")
-                        .append(mYear).append(" "));
+                        .append(month + 1).append("-")
+                        .append(year).append(" "));
     }
 
 
@@ -323,7 +384,7 @@ public void navigateToView(){
                     mMonth = monthOfYear;
                     mDay = dayOfMonth;
                     updateDisplay();
-                    updateDisplayOut();
+                    //updateDisplayOut();
                 }
             };
 
