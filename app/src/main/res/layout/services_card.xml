@@ -55,7 +55,6 @@
         android:background="@color/offerBackgroudGreen"
         android:padding="1dp">
         <ImageView
-            android:background="@drawable/breakfasthome"
             android:id="@+id/offers_image"
             android:layout_width="240dp"
             android:layout_height="200dp"
@@ -88,7 +87,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="Beautiful Point"
-                android:textSize="@dimen/smallFontL" />
+                android:maxLines="3"
+                android:textSize="@dimen/smallFontL"
+                android:layout_marginBottom="5dp"/>
 
             <Button
                 android:id="@+id/viewDetails_btn"
@@ -101,15 +102,6 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/smallFont" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/placeName_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:text="Dilshan Garden"
-            android:textSize="@dimen/smallFontL" />
 
     </LinearLayout>
 

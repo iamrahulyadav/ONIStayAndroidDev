@@ -29,13 +29,16 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +60,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     LinearLayoutManager layoutManager;
     ServicesAdapter adapter,adapterOffer;
     ImageButton wallet_Image,fav_imgBtn;
+    ImageView home_firstImage;
+    ProgressBar progressBar;
 
 
 
@@ -72,6 +77,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         setGridData();
         greeting_textView=findViewById(R.id.greeting_textView);
         menuBar_imgBtn=findViewById(R.id.menuBar_imgBtn);
@@ -144,7 +151,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
     //apicall for featured property
     public void apiCallForFeaturedProperty(){
-        String url = "http://onistays.com/api/v2/features_prop";
+        String url = "http://www.onistays.com/api/v1/features_prop";
+
         final VolleyAPICall volleyAPICall = new VolleyAPICall(this,url);
         volleyAPICall.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
                     @Override
@@ -237,9 +245,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     }
     //apicall for offer Image
     public void apiCallForofferImage(){
-        String url = "http://onistays.com/api/v2/features_prop";
-        final VolleyAPICall volleyAPICall = new VolleyAPICall(this,url);
-        volleyAPICall.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
+        home_firstImage = findViewById(R.id.home_firstImage);
+        String url = "http://www.onistays.com/api/v2/homebanner";
+        final VolleyAPICall volleyAPICall1 = new VolleyAPICall(this,url);
+        volleyAPICall1.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
                     @Override
                     public void getResponse(JSONArray response) {
                         Log.e("VOLLEY","RES"+response);
@@ -259,8 +268,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         for(int i = 0;i<response.length();i++){
             JSONObject obj = new JSONObject();
             obj = response.getJSONObject(i);
-            image[i]= obj.getString("Thumbnail");
+            image[i]= obj.getString("Image");
         }
+         Picasso
+                 .with(this)
+                .load(image[2])
+                .into(home_firstImage);
+        progressBar.setVisibility(View.GONE);
         setOfferimages(image);
     }
 
@@ -310,8 +324,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         }
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
 
     }
     @SuppressWarnings("StatementWithEmptyBody")

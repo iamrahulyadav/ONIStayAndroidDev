@@ -33,6 +33,14 @@ public VolleyAPICall(Context context, String JsonURL) {
 
     }
 
+    public VolleyAPICall(Context context, String JsonURL,Map<String, String> header) {
+        this.JsonURL = JsonURL;
+        this.context = context;
+        requestQueue = Volley.newRequestQueue(context);
+        this.header = header;
+
+    }
+
     public void addHeader(String key, String value) {
         header.put(key, value);
     }
@@ -61,6 +69,7 @@ public VolleyAPICall(Context context, String JsonURL) {
 
                 return header;
             }
+
 
         };
         requestQueue.add(jsonArrayRequest);

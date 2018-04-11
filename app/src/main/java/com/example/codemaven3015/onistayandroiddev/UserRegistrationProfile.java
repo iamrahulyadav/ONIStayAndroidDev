@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -119,12 +121,12 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
             public void onClick(View v) {
                 if(submitButton.getText().toString().toLowerCase().equals("edit")){
                     if(checkForValidation()) {
-                        setEditTextFocusable(true);
-                        submitButton.setText("SUMMIT");
+                        //setEditTextFocusable(true);
+                        submitButton.setText("SUBMIT");
                     }
                 }else{
                     sendDataToServer();
-                    setEditTextFocusable(false);
+                    //setEditTextFocusable(false);
                     submitButton.setText("EDIT");
 
                 }
@@ -140,6 +142,9 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         phone = editTextMobile.getText().toString().trim();
         RadioButton radioButton = v.findViewById(radioGroupGender.getCheckedRadioButtonId());
         gender = radioButton.getText().toString();
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("clientSurvey", "1");
+
     }
     public boolean getSelectedIndex(){
         int selectedIndex = radioGroupGender.getCheckedRadioButtonId();
