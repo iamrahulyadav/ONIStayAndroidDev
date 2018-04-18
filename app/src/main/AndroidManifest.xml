@@ -27,7 +27,12 @@
         <activity android:name=".SplashActivity">
 
         </activity>
-        <activity android:name=".Login_page" />
+        <activity android:name=".Login_page" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
         <activity android:name=".OTP_Verification"></activity>
         <activity android:name=".Site_listView" />
         <activity
@@ -38,11 +43,7 @@
         <activity
             android:name=".Home"
             android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
         </activity>
         <activity android:name=".FilterActivity" />
         <activity android:name=".Site_Image_View" />

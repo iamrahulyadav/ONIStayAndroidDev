@@ -1,30 +1,41 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Login_page extends AppCompatActivity {
     Button button,login_referalBtn;
     EditText login_editText, login_referalEditText;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     boolean permissionFlag;
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+    Map<String, String> header;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +44,16 @@ public class Login_page extends AppCompatActivity {
         login_referalEditText = findViewById(R.id.login_referalEditText);
         login_referalEditText.setVisibility(View.INVISIBLE);
         button = findViewById(R.id.login_verifybutton);
+        sharedpreferences = getApplicationContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedpreferences.edit();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkValidation(login_editText.getText().toString())) {
+                String phone_number = login_editText.getText().toString();
+                if(checkValidation(phone_number)) {
+                    registerNumber(phone_number,"");
                     //registerNumber(login_editText.getText().toString(),login_referalEditText.getText().toString());
-                    openOTPPage();
+                    //openOTPPage();
                     //checkAndRequestPermissions();
                 }
             }
@@ -98,29 +113,87 @@ public class Login_page extends AppCompatActivity {
         number = number.trim();
         referalCode = referalCode.trim();
 
-        String url = "http://onistays.com/api/v2/features_prop";
-        final VolleyAPICall volleyAPICall = new VolleyAPICall(this,url);
-        volleyAPICall.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
-                    @Override
-                    public void getResponse(JSONArray response) {
-                        Log.e("VOLLEY","RES"+response);
+        String url = "http://www.onistays.com/api/v7/oni_user_auth/"+number+".json";
+        final VolleyAPICallJsonObject volleyAPICallJsonObject = new VolleyAPICallJsonObject(this,url);
+        volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                Log.e("VOLLEY","RES"+response);
+                if(response == null){
 
-                        parsingtheResponseData(response);
-
-                    }
+                }else {
+                    parsingtheResponseData(response);
                 }
+
+            }
+        }
         );
 
     }
     // check the successful response
-    public void parsingtheResponseData(JSONArray responce){
-        // success
-        //
-        //failed
-        showAlertMessage showAlertMessage = new showAlertMessage(this,"Message","Tittle");
-        showAlertMessage.showMessage();
+    public void parsingtheResponseData(JSONObject responce){
+       Log.e("JsonObject",responce.toString());
+        try {
+            editor.putString("NAME",responce.getString("name"));
+            editor.putString("MAIL",responce.getString("mail"));
+            editor.putString("CONTACT_NUMBER",login_editText.getText().toString());
+            editor.putString("USER_ID",responce.getString("uid"));
+            editor.commit();
+            //openOTPPage();
+            showCustomView(responce.getString("name"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //showAlertMessage showAlertMessage = new showAlertMessage(this,"Message","Tittle");
+        //showAlertMessage.showMessage();
 
     }
+    public void showCustomView(final String name){
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.enter_password, null);
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.setCancelable(false);
+        final AlertDialog dialog = alertDialogBuilder.create();
+        TextView passwordText = view.findViewById(R.id.password_view);
+        passwordText.setText("Hi! "+name);
+        final EditText password_text= view.findViewById(R.id.password_text);
+        Button password_button = view.findViewById(R.id.password_button);
+        password_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String password = password_text.getText().toString().trim();
+                if(password.equals("")){
+                    password_text.setError("Please enter password");
+                    return;
+                }else {
+                    header = new HashMap<>();
+                    header.put("username","test");
+                    header.put("password","12345");
+
+                    loginApiCall();
+
+                     //String url = "http://www.onistays.com/api/v4/users/login";
+                }
+            }
+        });
+        dialog.show();
+
+    }
+    public void loginApiCall(){
+        String url = "http://www.onistays.com/api/v4/users/login";
+        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                Log.e("lol",response.toString());
+            }
+        });
+    }
+
     // checking if phone is valid or not
     public boolean checkValidation(String text){
         long number = -1;
