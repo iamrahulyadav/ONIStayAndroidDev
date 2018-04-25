@@ -8,6 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
@@ -47,8 +48,7 @@ public class VolleyAPICallJsonObject {
     }
 
     public void executeRequest(int method, final VolleyAPICallJsonObject.VolleyCallback callback) {
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, JsonURL,null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, JsonURL,new JSONObject(header), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                  callback.getResponse(response);
@@ -57,27 +57,53 @@ public class VolleyAPICallJsonObject {
             @Override
             public void onErrorResponse(VolleyError error) {
                   Log.e("ONI","INSIDE ERROR CALLBACK");
+                callback.getError(error);
             }
         }){
 
-            @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers1 = new HashMap<String, String>();
+                headers1.put("Content-Type", "application/json; charset=utf-8");
+
+                return headers1;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                return header;
-            }
-
-
-        };
+        }
+        ;
         requestQueue.add(jsonObjectRequest);
+
+
+//        StringRequest stringRequest = new StringRequest(method, JsonURL, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    callback.getResponse(new JSONObject(response));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("Check","jdhsjch");
+//            }
+//        }){
+//
+//            @Override
+//            protected Map<String, String> getParams()
+//            {
+//                return header;
+//            }
+//
+//      };
+//        requestQueue.add(stringRequest);
 
     }
 
     public interface VolleyCallback {
         public void getResponse(JSONObject response);
+        public void getError(VolleyError error);
     }
 }

@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -47,6 +49,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
@@ -55,6 +59,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     ImageButton menuBar_imgBtn,notification_imgBtn;
     DrawerLayout drawer;
     Button City_Btn;
+    Menu menu;
     Spinner SearchFor_sppiner,searchCity_spinner;
     RecyclerView recyclerView,offerRecyclerView,product_RecyclerView;
     LinearLayoutManager layoutManager;
@@ -102,7 +107,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         // sppiner For Search & Cities
         SearchFor_sppiner=findViewById(R.id.SearchFor_sppiner);
         searchCity_spinner=findViewById(R.id.searchCity_spinner);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setOnclickOnToolBar();
@@ -113,7 +117,41 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         setNotificationView();
         apiCallForFeaturedProperty();
         apiCallForofferImage();
+        apiCalltogetCity();
+        //updateMenuTitles();
 
+    }
+
+    private void apiCalltogetCity() {
+            String url = "http://www.onistays.com/api/v9/state_city/getTree";
+        Map<String, String> header= new HashMap<>();
+        header.put("vid","2");
+            final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url,header);
+            volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICall.VolleyCallback() {
+                @Override
+                public void getResponse(JSONArray response) {
+                    Log.e("city",response.toString());
+                    ArrayList<String> options=new ArrayList<String>();
+                    for(int i = 0; i<response.length();i++){
+                        try {
+                            JSONObject obj = response.getJSONObject(i);
+                            JSONArray parent= obj.getJSONArray("parent");
+                            String key = parent.getString(0);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            });
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 
     private void setGridData()
@@ -298,19 +336,20 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Calendar c = Calendar.getInstance();        c.setTime(dt);
         int hours = c.get(Calendar.HOUR_OF_DAY);
         int min = c.get(Calendar.MINUTE);
+        String name = getIntent().getStringExtra("Name");
 
         if(hours>=1 && hours<=12){
             //Toast.makeText(this, "Good Morning", Toast.LENGTH_SHORT).show();
-            greeting_textView.append("Good Morning John");
+            greeting_textView.append("Good Morning "+name);
         }else if(hours>=12 && hours<=16){
             //Toast.makeText(this, "Good Afternoon", Toast.LENGTH_SHORT).show();
-            greeting_textView.append("Good Afternoon John");
+            greeting_textView.append("Good Afternoon "+name);
         }else if(hours>=16 && hours<=21){
             //Toast.makeText(this, "Good Evening", Toast.LENGTH_SHORT).show();
-            greeting_textView.append("Good Evening John");
+            greeting_textView.append("Good Evening "+name);
         }else if(hours>=21 && hours<=24){
             // Toast.makeText(this, "Good Night", Toast.LENGTH_SHORT).show();
-            greeting_textView.append("Good Night John");
+            greeting_textView.append("Good Night "+name);
         }
     }
 
@@ -325,6 +364,25 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        //super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
+//        // Create your menu...
+//
+//        this.menu = menu;
+//        updateMenuTitles();
+//        return true;
+//    }
+
+    private void updateMenuTitles() {
+        MenuItem profileMenuItem = menu.findItem(R.id.profile);
+        if (getIntent().getStringExtra("Name").toLowerCase().equals("guest")) {
+            profileMenuItem.setTitle("Registration");
+        } else {
+            profileMenuItem.setTitle("Profile");
+        }
     }
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -345,9 +403,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         } else if (id == R.id.invite) {
             i = new Intent(Home.this,ShareAndEarn.class);
-            startActivity(i);
-        }else if (id == R.id.registration){
-            i = new Intent(Home.this,UserRegistration.class);
             startActivity(i);
         }else if (id == R.id.menu_callUs){
             askPermissionForCall();

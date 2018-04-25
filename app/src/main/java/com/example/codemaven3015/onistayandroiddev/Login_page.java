@@ -18,6 +18,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +79,12 @@ public class Login_page extends AppCompatActivity {
         //login_editText.setVisibility(View.INVISIBLE);
         //checkValidation();
     }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+
     public boolean checkAndRequestPermissions(){
         int permissionSendMessage = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.SEND_SMS);
@@ -118,15 +128,31 @@ public class Login_page extends AppCompatActivity {
         volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
-                Log.e("VOLLEY","RES"+response);
-                if(response == null){
+                Log.e("VOLLEY", "RES" + response);
+                if (response == null) {
 
-                }else {
+                } else {
                     parsingtheResponseData(response);
                 }
 
             }
-        }
+
+                    @Override
+                    public void getError(VolleyError error) {
+                        if (error != null) {
+                            String errorCheck = "org.json.JSONException: Value null of type org.json.JSONObject$1 cannot be converted to JSONObject";
+                            Log.e("check", error.getMessage());
+                            if (errorCheck.equals(error.getMessage())) {
+                                editor.putString("CONTACT_NUMBER", login_editText.getText().toString());
+                                editor.apply();
+                                Intent i = new Intent(Login_page.this, Home.class);
+                                i.putExtra("Name", "Guest");
+                                startActivity(i);
+                            }
+
+                        }
+                    }
+                }
         );
 
     }
@@ -160,6 +186,13 @@ public class Login_page extends AppCompatActivity {
         final AlertDialog dialog = alertDialogBuilder.create();
         TextView passwordText = view.findViewById(R.id.password_view);
         passwordText.setText("Hi! "+name);
+        TextView cross = view.findViewById(R.id.cross);
+        cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
         final EditText password_text= view.findViewById(R.id.password_text);
         Button password_button = view.findViewById(R.id.password_button);
         password_button.setOnClickListener(new View.OnClickListener() {
@@ -171,8 +204,8 @@ public class Login_page extends AppCompatActivity {
                     return;
                 }else {
                     header = new HashMap<>();
-                    header.put("username","test");
-                    header.put("password","12345");
+                    header.put("username",sharedpreferences.getString("NAME",""));
+                    header.put("password",password);
 
                     loginApiCall();
 
@@ -189,10 +222,29 @@ public class Login_page extends AppCompatActivity {
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
-                Log.e("lol",response.toString());
+
+                //og.e("lol",response.toString());
+
+                try {
+                    editor.putString("SESSION_ID",response.getString("sessid"));
+                    editor.putString("TOKEN",response.getString("token"));
+                    editor.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent i = new Intent(Login_page.this,Home.class);
+                i.putExtra("Name",sharedpreferences.getString("NAME",""));
+                startActivity(i);
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+                showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+                showAlertMessage.showMessage();
             }
         });
     }
+
 
     // checking if phone is valid or not
     public boolean checkValidation(String text){

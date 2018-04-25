@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,13 +42,16 @@ public VolleyAPICall(Context context, String JsonURL) {
 
     }
 
-    public void addHeader(String key, String value) {
-        header.put(key, value);
-    }
 
     public void executeRequest(int method, final VolleyCallback callback) {
+        JSONArray array = null ;
+        try {
+            array = new JSONArray(header);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(method, JsonURL,null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(method, JsonURL,array, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 callback.getResponse(response);
@@ -60,14 +64,11 @@ public VolleyAPICall(Context context, String JsonURL) {
         }){
 
             @Override
-            public String getBodyContentType() {
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-            }
-
-            @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers1 = new HashMap<String, String>();
+                headers1.put("Content-Type", "application/json; charset=utf-8");
 
-                return header;
+                return headers1;
             }
 
 
