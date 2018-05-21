@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.cocosw.bottomsheet.BottomSheet;
 
 import org.json.JSONArray;
@@ -79,39 +82,8 @@ public class Site_listView extends AppCompatActivity {
         layoutManager=new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        int[] images = {
-                R.drawable.hotel1,
-                R.drawable.hotel2,
-                R.drawable.hotel3,
-                R.drawable.hotel4,
-                R.drawable.hotel5,
-                R.drawable.hotel6
-        };
-         String[] price = {"₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999", "₹ 29999"};
-         String[] hotel = {"Chapter One",
-                "Chapter Two",
-                "Chapter Three",
-                "Chapter Four",
-                "Chapter Five",
-                "Chapter Six"};
-        JSONArray list = new JSONArray();
-        for(int i = 0;i<6;i++){
-            JSONObject obj = new JSONObject();
-            try {
-                obj.put("image",images[i]);
-                obj.put("price",price[i]);
-                obj.put("hotel",hotel[i]);
-                list.put(obj);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+         setDataToListView();
 
-
-        }
-        adapter=new Card_layout(this,"SiteList",list);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"list"));
-        recyclerView.setAdapter(adapter);
         sort_textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +91,24 @@ public class Site_listView extends AppCompatActivity {
             }
         });
     }
+
+    private void setDataToListView() {
+        String url = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=";
+         url = url+getIntent().getStringExtra("CITY");
+        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
+            @Override
+            public void getResponse(JSONArray response) {
+                Log.e("check",response.toString());
+                adapter=new Card_layout(getApplicationContext(),"SiteList",response);
+                int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+                recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"list"));
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
+    }
+
     public void bottomSheet(){
         new BottomSheet.Builder(this).title("Sort By").sheet(R.menu.sort).listener(new DialogInterface.OnClickListener() {
             @Override

@@ -38,8 +38,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -50,6 +55,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,6 +74,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     ImageButton wallet_Image,fav_imgBtn;
     ImageView home_firstImage;
     ProgressBar progressBar;
+    HashMap<String, String> cityId ;
 
 
 
@@ -118,30 +126,73 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         apiCallForFeaturedProperty();
         apiCallForofferImage();
         apiCalltogetCity();
+        setOnClickCitySpinner();
         //updateMenuTitles();
 
     }
 
+    private void setOnClickCitySpinner() {
+
+        searchCity_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                if(position>=1) {
+                    String tid = cityId.get(selectedItem);
+                    Intent i = new Intent(Home.this, Site_listView.class);
+                    i.putExtra("CITY", selectedItem);
+                    i.putExtra("UID", tid);
+                    startActivity(i);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+
     private void apiCalltogetCity() {
-            String url = "http://www.onistays.com/api/v9/state_city/getTree";
-        Map<String, String> header= new HashMap<>();
-        header.put("vid","2");
-            final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url,header);
-            volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICall.VolleyCallback() {
+            String url = "http://www.onistays.com/api/v1.1/oni_state_city/2";
+
+            final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url);
+            volleyAPICallJsonObject1.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
                 @Override
-                public void getResponse(JSONArray response) {
+                public void getResponse(JSONObject response) {
                     Log.e("city",response.toString());
-                    ArrayList<String> options=new ArrayList<String>();
-                    for(int i = 0; i<response.length();i++){
+                    List<String> city = new ArrayList<String>();
+                    city.add("Select City");
+                    //city.add("City");
+                    cityId =  new HashMap<String, String>();
+                    for(Iterator<String> iter = response.keys(); iter.hasNext();) {
+                        String key = iter.next();
                         try {
-                            JSONObject obj = response.getJSONObject(i);
-                            JSONArray parent= obj.getJSONArray("parent");
-                            String key = parent.getString(0);
+                            JSONObject jsonObject = response.getJSONObject(key);
+                            JSONObject children = jsonObject.getJSONObject("children");
+                            for(Iterator<String> i = children.keys();i.hasNext();){
+                                String childKey = i.next();
+                                JSONObject obj = children.getJSONObject(childKey);
+                                city.add(obj.getString("name"));
+                                cityId.put(obj.getString("name"),obj.getString("tid"));
+
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                            android.R.layout.simple_spinner_item, city);
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    searchCity_spinner.setAdapter(dataAdapter);
+                }
+
+                @Override
+                public void getError(VolleyError error) {
+                    Log.e("Error",error.toString());
                 }
 
             });

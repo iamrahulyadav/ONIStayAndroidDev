@@ -19,6 +19,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +38,7 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
 
 
 
-    public Card_layout(Context context,String fromWhere,JSONArray list) {
+    public  Card_layout(Context context,String fromWhere,JSONArray list) {
         this.context = context;
         this.fromWhere = fromWhere;
         this.list = list;
@@ -141,8 +143,11 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.card_layout, null,false);
+        //LayoutInflater inflater =LayoutInflater.from(context);
+        //View view = inflater.inflate(R.layout.card_layout, null,false);
+        View view;
+        LayoutInflater inflater = (LayoutInflater)   context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.card_layout, null);
         ViewHolder holder = new ViewHolder(view);
         return holder;
 
@@ -151,8 +156,30 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         try {
             JSONObject obj = list.getJSONObject(i);
-            viewHolder.hotel_image.setBackgroundResource(obj.getInt("image"));
-            viewHolder.price_textView.setText(obj.getString("price"));
+            Picasso
+                    .with(context)
+                    .load(obj.getString("Thumbnail"))
+                    .into(viewHolder.hotel_image);
+            //viewHolder.product_textview.setText(productFeatureName[i]);
+            viewHolder.hotel_image.setBackgroundResource(R.drawable.hotel1);
+            viewHolder.hotel_textView.setText(obj.getString("title"));
+            viewHolder.address_textView.setText(obj.getString("Address"));
+            JSONObject tempPrice = obj.getJSONObject("Price");
+            JSONObject tempCurrencySymbol = obj.getJSONObject("Currency Symbol");
+            viewHolder.cost_textView.setText(tempCurrencySymbol.getString("value") +" "+tempPrice.getString("value"));
+            JSONObject tempDiscount = obj.getJSONObject("Discount");
+            viewHolder.save_textView.setText(tempDiscount.getString("value") +   " % Discount");
+            int myNum = 0;
+            int price = 0;
+
+            try {
+                myNum = Integer.parseInt(tempDiscount.getString("value"));
+                price = Integer.parseInt(tempPrice.getString("value"));
+                price = (price * 100)/(100-myNum);
+            } catch(NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+            viewHolder.price_textView.setText(tempCurrencySymbol.getString("value") +" "+price );
             viewHolder.price_textView.setPaintFlags(viewHolder.price_textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             viewHolder.hotel_textView.setText(obj.getString("hotel"));
         } catch (JSONException e) {

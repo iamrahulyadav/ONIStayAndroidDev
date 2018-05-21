@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-public class Site_Image_View extends AppCompatActivity {
+public class  Site_Image_View extends AppCompatActivity {
     android.support.v4.view.ViewPager ViewPager;
     LinearLayout SliderDots;
     private int dotsCount;

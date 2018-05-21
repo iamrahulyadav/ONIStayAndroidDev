@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:foreground="?selectableItemBackground"
         card_view:cardBackgroundColor="#f7f7f7"
         card_view:cardCornerRadius="16dp"
         card_view:cardElevation="5dp"
