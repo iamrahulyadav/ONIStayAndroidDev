@@ -13,7 +13,9 @@ import android.widget.Toast;
  * Created by CodeMaven3015 on 3/19/2018.
  */
 
-public class IncomingSms extends BroadcastReceiver {
+public class
+
+IncomingSms extends BroadcastReceiver {
     //final SmsManager sms = SmsManager.getDefault();
     @Override
     public void onReceive(Context context, Intent intent) {
