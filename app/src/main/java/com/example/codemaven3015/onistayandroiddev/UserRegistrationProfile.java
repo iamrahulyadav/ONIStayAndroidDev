@@ -35,10 +35,12 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
     RadioGroup radioGroupGender;
     ImageView upload_photo;
     View v;
+    String name = "";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         v =inflater.inflate(R.layout.user_registration_profile,container,false);
+
         setWidgets(v);
         setOnClickButton();
         selectImageProfile();

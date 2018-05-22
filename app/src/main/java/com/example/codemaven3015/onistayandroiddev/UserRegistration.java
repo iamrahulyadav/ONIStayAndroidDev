@@ -37,6 +37,7 @@ public class UserRegistration extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     ImageButton backButton;
+    String name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class UserRegistration extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        name = getIntent().getStringExtra("NAME");
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -121,8 +123,13 @@ public void setBackClickListner(){
             //
             switch(position){
                 case 0:
-                    UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
-                    return userRegistrationProfile;
+                    if(name.equals("guest"))
+                    {
+                        UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
+                        return userRegistrationProfile;
+                    }else {
+
+                    }
                 case 1:
                     UserRegistrationAddress userRegistrationAddress = new UserRegistrationAddress();
                     return userRegistrationAddress;

@@ -228,59 +228,32 @@ public class Login_page extends AppCompatActivity {
     }
     public void loginApiCall(){
         String url = "http://www.onistays.com/api/v4/users/login";
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("lol",response);
 
-            }
-        }, new Response.ErrorListener() {
+        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("lol","error");
-            }
-        })
-        {
+            public void getResponse(JSONObject response) {
 
-            @Override
-            protected Map<String, String> getParams(){
-                HashMap<String, String> headers1 = new HashMap<String, String>();
-                headers1.put("username","test");
-                headers1.put("password","12345");
-                //headers1.put("Content-Type", "application/json; charset=utf-8");
+                Log.e("lol",response.toString());
 
-                return headers1;
+                try {
+                    editor.putString("SESSION_ID",response.getString("sessid"));
+                    editor.putString("TOKEN",response.getString("token"));
+                    editor.commit();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Intent i = new Intent(Login_page.this,Home.class);
+                i.putExtra("Name",sharedpreferences.getString("NAME",""));
+                startActivity(i);
             }
 
-        };
-        requestQueue.add(stringRequest);
-
-//        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header);
-//        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
-//            @Override
-//            public void getResponse(JSONObject response) {
-//
-//                //og.e("lol",response.toString());
-//
-//                try {
-//                    editor.putString("SESSION_ID",response.getString("sessid"));
-//                    editor.putString("TOKEN",response.getString("token"));
-//                    editor.commit();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                Intent i = new Intent(Login_page.this,Home.class);
-//                i.putExtra("Name",sharedpreferences.getString("NAME",""));
-//                startActivity(i);
-//            }
-//
-//            @Override
-//            public void getError(VolleyError error) {
-//                showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
-//                showAlertMessage.showMessage();
-//            }
-//        });
+            @Override
+            public void getError(VolleyError error) {
+                showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+                showAlertMessage.showMessage();
+            }
+        });
     }
 
 

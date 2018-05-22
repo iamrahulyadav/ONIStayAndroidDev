@@ -413,6 +413,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             drawer.openDrawer(GravityCompat.END);
         }
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menuItem = navigationView.getMenu();
+        MenuItem profileMenuItem = menuItem.findItem(R.id.profile);
+        if (getIntent().getStringExtra("Name").toLowerCase().equals("guest")) {
+            profileMenuItem.setTitle("Registration");
+        } else {
+            profileMenuItem.setTitle("Profile");
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -423,7 +431,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 //        // Create your menu...
 //
 //        this.menu = menu;
-//        updateMenuTitles();
+//        //updateMenuTitles();
+//        MenuItem profileMenuItem = menu.findItem(R.id.profile);
+//        if (getIntent().getStringExtra("Name").toLowerCase().equals("guest")) {
+//            profileMenuItem.setTitle("Registration");
+//        } else {
+//            profileMenuItem.setTitle("Profile");
+//        }
 //        return true;
 //    }
 
@@ -435,6 +449,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             profileMenuItem.setTitle("Profile");
         }
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -443,6 +458,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Intent i ;
         if (id == R.id.profile) {
             i = new Intent(Home.this,UserRegistration.class);
+            i.putExtra("NAME",getIntent().getStringExtra("Name"));
             startActivity(i);
             // Handle the camera action
 
