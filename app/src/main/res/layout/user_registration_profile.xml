@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
+        android:layout_marginBottom="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -130,6 +128,7 @@
             android:text="Female"/>
         </RadioGroup>
         <Button
+
             android:layout_marginTop="30dp"
             android:id="@+id/submitButton"
             android:layout_width="260dp"
@@ -140,7 +139,8 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/largeFont" />
+
     </LinearLayout>
 </ScrollView>
 
-</LinearLayout>
+

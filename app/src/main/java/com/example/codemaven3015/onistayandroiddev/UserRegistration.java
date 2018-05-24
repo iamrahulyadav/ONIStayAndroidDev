@@ -123,12 +123,15 @@ public void setBackClickListner(){
             //
             switch(position){
                 case 0:
-                    if(name.equals("guest"))
-                    {
-                        UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
-                        return userRegistrationProfile;
+                    if(name.toLowerCase().equals("guest")){
+
+                        NewUserRegistration newUserRegistration = new NewUserRegistration();
+                        return newUserRegistration;
+
                     }else {
 
+                        UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
+                        return userRegistrationProfile;
                     }
                 case 1:
                     UserRegistrationAddress userRegistrationAddress = new UserRegistrationAddress();

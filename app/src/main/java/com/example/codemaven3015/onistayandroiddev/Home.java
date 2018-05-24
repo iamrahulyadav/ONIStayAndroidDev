@@ -60,7 +60,8 @@ import java.util.List;
 import java.util.Map;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+public class
+Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     TextView greeting_textView;
     GridView androidGridView;
     ImageButton menuBar_imgBtn,notification_imgBtn;

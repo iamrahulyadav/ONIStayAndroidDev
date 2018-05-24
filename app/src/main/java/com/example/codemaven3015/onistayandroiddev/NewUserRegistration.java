@@ -1,145 +1,203 @@
 package com.example.codemaven3015.onistayandroiddev;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-public class NewUserRegistration extends AppCompatActivity {
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-    ImageButton backButton;
+public class NewUserRegistration extends android.support.v4.app.Fragment {
+    Button submitButton;
+    EditText editTextFirstName,editTextLastName,editTextEmail,editTextMobile,editTextDoB;
+    RadioGroup radioGroupGender;
+    ImageView upload_photo;
+    View v;
     String name = "";
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        v =inflater.inflate(R.layout.user_registration_profile,container,false);
+
+        setWidgets(v);
+        selectImageProfile();
+        OnClickButtonSubmit();
+        return v;
+    }
+
+    private void OnClickButtonSubmit() {
+        submitButton.setText("Register");
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendDataToServer();
+            }
+        });
+    }
+
+
+    public void setWidgets(View v){
+        submitButton = v.findViewById(R.id.submitButton);
+        editTextFirstName = v.findViewById(R.id.editTextFirstName);
+        editTextLastName = v.findViewById(R.id.editTextLastName);
+        editTextEmail = v.findViewById(R.id.editTextEmail);
+        editTextMobile = v.findViewById(R.id.editTextMobile);
+        editTextDoB = v.findViewById(R.id.editTextDoB);
+        radioGroupGender = v.findViewById(R.id.radioGroupGender);
+        upload_photo = v.findViewById(R.id.upload_photo);
+        editTextDoB.setFocusable(false);
+        MyEditTextDatePicker myEditTextDatePicker = new MyEditTextDatePicker(getContext(),editTextDoB);
+        submitButton.setVisibility(View.VISIBLE);
+    }
+    public void selectImageProfile(){
+        upload_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent();//(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                i.setType("image/*");
+                i.setAction(Intent.ACTION_GET_CONTENT);
+                i.putExtra("crop", "true");
+                i.putExtra("outputX", 100);
+                i.putExtra("outputY", 100);
+                i.putExtra("scale", true);
+                i.putExtra("return-data", true);
+                // i.p
+                startActivityForResult(Intent.createChooser(i,"Select Profile Picture"),10);
+            }
+        });
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_registration);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        name = getIntent().getStringExtra("NAME");
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        setBackClickListner();
-
-    }
-public void setBackClickListner(){
-    backButton = findViewById(R.id.backButton);
-    backButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(NewUserRegistration.this,Home.class);
-            startActivity(i);
-        }
-    });
-}
-
-
-   /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_user_registration, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+        if (requestCode == 10 && resultCode == -1 && data != null && data.getData() != null) {
+            Uri uri = data.getData();//data.getStringExtra()
+            Bitmap bitmap = null;
+            bitmap = getScaledBitmap(uri);
+            RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+            roundedBitmapDrawable.setCircular(true);
+            roundedBitmapDrawable.setAntiAlias(true);
+            upload_photo.setImageDrawable(roundedBitmapDrawable);
         }
     }
+    private Bitmap getScaledBitmap(Uri uri){
+        Bitmap thumb = null ;
+        try {
+            ContentResolver cr = getActivity().getContentResolver();
+            InputStream in = cr.openInputStream(uri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize=4;
+            thumb = BitmapFactory.decodeStream(in,null,options);
+        } catch (FileNotFoundException e) {
+        }
+        return thumb ;
+    }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public void sendDataToServer(){
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        if(checkForValidation()) {
+            String firstName, lastName, dob, email, phone, gender;
+            firstName = editTextFirstName.getText().toString().trim();
+            lastName = editTextLastName.getText().toString().trim();
+            dob = editTextDoB.getText().toString().trim();
+            email = editTextEmail.getText().toString().trim();
+            phone = editTextMobile.getText().toString().trim();
+            RadioButton radioButton = v.findViewById(radioGroupGender.getCheckedRadioButtonId());
+            gender = radioButton.getText().toString();
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("clientSurvey", "1");
+        }else {
+            return;
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            //
-            switch(position){
-                case 0:
-                    if(name.equals("guest"))
-                    {
-                        UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
-                        return userRegistrationProfile;
-                    }else {
-
-                    }
-                case 1:
-                    UserRegistrationAddress userRegistrationAddress = new UserRegistrationAddress();
-                    return userRegistrationAddress;
-                case 2:
-                    UserRegistrationICard userRegistrationICard = new UserRegistrationICard();
-                    return userRegistrationICard;
-                default:
-                    return PlaceholderFragment.newInstance(position + 1);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
+    }
+    public boolean getSelectedIndex(){
+        int selectedIndex = radioGroupGender.getCheckedRadioButtonId();
+        if(selectedIndex<0){
+            showAlertMessage showAlertMessage = new showAlertMessage(getContext(),"Please select gender","Info");
+            showAlertMessage.showMessage();
+            return false;
+        }else {
+            return true;
         }
     }
+    public boolean checkForValidation(){
+        if(emptyFieldValidation() || emailValidation() || specialCharValidation() || getSelectedIndex()){
+            return true;
+        }
+        return false;
+    }
+    public boolean emailValidation(){
+        String email = editTextEmail.getText().toString().trim();
+        if(!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            return true;
+        }else {
+            editTextEmail.setError("Please enter valid Email");
+            return false;
+        }
+    }
+    public boolean emptyFieldValidation(){
+        if(editTextFirstName.getText().toString().isEmpty()){
+            editTextFirstName.setError("Please enter First Name");
+            return false;
+        }
+        if(editTextEmail.getText().toString().isEmpty()){
+            editTextEmail.setError("Please enter valid Email");
+            return false;
+        }
+        if(editTextMobile.getText().toString().isEmpty()){
+            editTextMobile.setError("Please enter valid Phone number ");
+            return false;
+        }
+        if(editTextMobile.getText().toString().isEmpty()){
+            editTextMobile.setError("Please select DoB ");
+            return false;
+        }
+        return true;
+    }
+    public boolean specialCharValidation(){
+        String s = editTextFirstName.toString();
+        Pattern regex = Pattern.compile("[$&+;=\\\\?@#|/<>^*()%!]");
+
+        if (regex.matcher(s).find()) {
+            editTextFirstName.setError("Enter valid Name");
+            return false;
+        }
+        if(regex.matcher(editTextLastName.getText()).find()){
+            editTextLastName.setError("Enter valid Name");
+            return false;
+        }
+        return true;
+    }
+
 }
