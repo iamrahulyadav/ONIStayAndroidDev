@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  */
 
 public class UserRegistrationProfile extends android.support.v4.app.Fragment {
-    Button submitButton;
+    Button submitButton1;
     EditText editTextFirstName,editTextLastName,editTextEmail,editTextMobile,editTextDoB;
     RadioGroup radioGroupGender;
     ImageView upload_photo;
@@ -43,7 +43,8 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         return v;
     }
     public void setWidgets(View v){
-        submitButton = v.findViewById(R.id.submitButton);
+        //submitButton = v.findViewById(R.id.submitButton);
+        submitButton1 = v.findViewById(R.id.addressSubmitBtn);
         editTextFirstName = v.findViewById(R.id.editTextFirstName);
         editTextLastName = v.findViewById(R.id.editTextLastName);
         editTextEmail = v.findViewById(R.id.editTextEmail);
@@ -61,6 +62,8 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         radioGroupGender.setEnabled(false);
         upload_photo.setEnabled(false);
         editTextDoB.setEnabled(false);
+
+
 
         MyEditTextDatePicker myEditTextDatePicker = new MyEditTextDatePicker(getContext(),editTextDoB);
     }

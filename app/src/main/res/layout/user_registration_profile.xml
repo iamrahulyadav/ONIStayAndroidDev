@@ -130,7 +130,7 @@
         <Button
 
             android:layout_marginTop="30dp"
-            android:id="@+id/submitButton"
+            android:id="@+id/addressSubmitBtn"
             android:layout_width="260dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
@@ -139,6 +139,13 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/largeFont" />
+        <Button
+            android:visibility="invisible"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:id="@+id/buttonSubmitCheck"
+            android:layout_marginBottom="100dp"
+            android:text="EDIT"/>
 
     </LinearLayout>
 </ScrollView>
