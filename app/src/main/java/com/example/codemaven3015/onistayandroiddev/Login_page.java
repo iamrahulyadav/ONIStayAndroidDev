@@ -254,24 +254,62 @@ public class Login_page extends AppCompatActivity {
 
     private void forgotApi()
     {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
         String url = "http://www.onistays.com/oni-endpoint/user/request_new_password";
         HashMap header1 = new HashMap<>();
         header1.put("name",sharedpreferences.getString("MAIL",""));
-        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url,header1);
-        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICall.VolleyCallback() {
-            @Override
-            public void getResponse(JSONArray response) {
 
-                Log.e("lol",response.toString());
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.e("check",response);
+
 
             }
+        }, new Response.ErrorListener() {
+           @Override
+           public void onErrorResponse(VolleyError error) {
+                Log.e("Check",error.toString());
+            }
+        }){
 
-//            @Override
-//            public void getError(VolleyError error) {
-//                Log.e("lol",error.toString());
-//            }
-        });
+
+                        @Override
+                        protected Map<String,String> getParams(){
+                        Map<String,String> params = new HashMap<String, String>();
+                        params.put("name","neha@jhd.fdg");
+
+                        return params;
+                    }
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        Map<String,String> params = new HashMap<String, String>();
+                        params.put("Content-Type","application/x-www-form-urlencoded");
+                        return params;
+                    }
+
+      };
+        requestQueue.add(stringRequest);
+
     }
+
+
+//        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url,header1);
+//        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICall.VolleyCallback() {
+//            @Override
+//            public void getResponse(JSONArray response) {
+//
+//                Log.e("lol",response.toString());
+//
+//            }
+//
+////            @Override
+////            public void getError(VolleyError error) {
+////                Log.e("lol",error.toString());
+////            }
+//        });
+
 
     public void loginApiCall(){
         String url = "http://www.onistays.com/oni-endpoint/user/login";

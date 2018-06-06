@@ -52,13 +52,6 @@ public VolleyAPICall(Context context, String JsonURL) {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-       JSONObject obj = new JSONObject();
-        try {
-            obj.put("name","yeah2hd.d");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        array.put(obj);
         Log.e("gdhg",array.toString()+"vhe");
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(method, JsonURL,array, new Response.Listener<JSONArray>() {
@@ -73,6 +66,7 @@ public VolleyAPICall(Context context, String JsonURL) {
                  Log.e("ONI","INSIDE ERROR CALLBACK");
             }
         }){
+
 //
 //            @Override
 //            public Map<String, String> getHeaders()  {
