@@ -8,8 +8,10 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera2" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -24,35 +26,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
-
-        </activity>
-        <activity android:name=".Login_page" >
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".Login_page">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OTP_Verification"></activity>
+        <activity android:name=".OTP_Verification" />
         <activity android:name=".Site_listView" />
         <activity
             android:name=".AllLocationsActivity"
             android:fitsSystemWindows="true"
             android:label="@string/title_activity_all_locations"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme" >
+
+        </activity>
         <activity
             android:name=".Home"
-            android:exported="true" >
+            android:exported="true">
 
         </activity>
         <activity android:name=".FilterActivity" />
         <activity android:name=".Site_Image_View" />
         <activity
             android:name=".Product_Image_page"
-            android:windowSoftInputMode="stateHidden" >
-
-        </activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PayNow" />
         <activity android:name=".Upcoming_Booking" />
         <activity android:name=".Cancelled_Booking" />
@@ -84,7 +84,7 @@
             android:name=".UserRegistration"
             android:label=""
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" > </activity>
+            android:windowSoftInputMode="stateHidden" />
 
         <receiver android:name=".IncomingSms">
             <intent-filter>
@@ -93,7 +93,7 @@
         </receiver>
 
         <activity android:name=".Cancled" />
-        <activity android:name=".ShareAndEarn"></activity>
+        <activity android:name=".ShareAndEarn" />
     </application>
 
 </manifest>

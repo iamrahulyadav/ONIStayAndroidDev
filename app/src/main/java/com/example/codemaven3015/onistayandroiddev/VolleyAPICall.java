@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +45,21 @@ public VolleyAPICall(Context context, String JsonURL) {
 
 
     public void executeRequest(int method, final VolleyCallback callback) {
-        JSONArray array = null ;
+        JSONArray array = new JSONArray() ;
         try {
             array = new JSONArray(header);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+       JSONObject obj = new JSONObject();
+        try {
+            obj.put("name","yeah2hd.d");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        array.put(obj);
+        Log.e("gdhg",array.toString()+"vhe");
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(method, JsonURL,array, new Response.Listener<JSONArray>() {
             @Override
@@ -59,18 +69,21 @@ public VolleyAPICall(Context context, String JsonURL) {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                  Log.e("ONI","INSIDE ERROR CALLBACK");
             }
         }){
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers1 = new HashMap<String, String>();
-                headers1.put("Content-Type", "application/json; charset=utf-8");
-
-                return headers1;
-            }
-
+//
+//            @Override
+//            public Map<String, String> getHeaders()  {
+//                HashMap<String, String> headers1 = new HashMap<String, String>();
+//               headers1.put("Content-Type", "application/json; charset=utf-8; application/x-www-form-urlencoded");
+//
+//                return headers1;
+//            }
+public String getBodyContentType() {
+    return "application/x-www-form-urlencoded;" ;
+}
 
         };
         requestQueue.add(jsonArrayRequest);

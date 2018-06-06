@@ -125,7 +125,7 @@ public class Login_page extends AppCompatActivity {
         number = number.trim();
         referalCode = referalCode.trim();
 
-        String url = "http://www.onistays.com/api/v7/oni_user_auth/"+number+".json";
+        String url = "http://www.onistays.com/oni-endpoint/oni_user_auth/"+number;
         final VolleyAPICallJsonObject volleyAPICallJsonObject = new VolleyAPICallJsonObject(this,url);
         volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
@@ -141,6 +141,7 @@ public class Login_page extends AppCompatActivity {
 
                     @Override
                     public void getError(VolleyError error) {
+                        Log.e("VOLLEY", "RES" + error);
 //                        if (error != null) {
 //                            String errorCheck = "org.json.JSONException: Value null of type org.json.JSONObject$1 cannot be converted to JSONObject";
 //                            Log.e("check", error.getMessage());
@@ -174,6 +175,8 @@ public class Login_page extends AppCompatActivity {
             editor.putString("MAIL",responce.getString("mail"));
             editor.putString("CONTACT_NUMBER",login_editText.getText().toString());
             editor.putString("USER_ID",responce.getString("uid"));
+            editor.putString("GENDER",getValueFromResponseObj(responce.getJSONObject("field_gender")));
+            editor.putString("DOB",getValueFromResponseObj(responce.getJSONObject("field_dob")));
             editor.commit();
             //openOTPPage();
             showCustomView(responce.getString("name"));
@@ -185,10 +188,23 @@ public class Login_page extends AppCompatActivity {
         //showAlertMessage.showMessage();
 
     }
+    public String getValueFromResponseObj(JSONObject obj){
+        JSONArray array = new JSONArray();
+        try {
+            array = obj.getJSONArray("und");
+            JSONObject obj1 =  new JSONObject();
+            obj1 = array.getJSONObject(0);
+            return obj1.getString("value");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+    }
     public void showCustomView(final String name){
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
-        LayoutInflater inflater = (LayoutInflater) this
+        final LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.enter_password, null);
         alertDialogBuilder.setView(view);
@@ -204,6 +220,15 @@ public class Login_page extends AppCompatActivity {
             }
         });
         final EditText password_text= view.findViewById(R.id.password_text);
+        Button forgotLogin_button=view.findViewById(R.id.forgotLogin_button);
+        forgotLogin_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                forgotApi();
+
+            }
+        });
         Button password_button = view.findViewById(R.id.password_button);
         password_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,8 +251,30 @@ public class Login_page extends AppCompatActivity {
         dialog.show();
 
     }
+
+    private void forgotApi()
+    {
+        String url = "http://www.onistays.com/oni-endpoint/user/request_new_password";
+        HashMap header1 = new HashMap<>();
+        header1.put("name",sharedpreferences.getString("MAIL",""));
+        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url,header1);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICall.VolleyCallback() {
+            @Override
+            public void getResponse(JSONArray response) {
+
+                Log.e("lol",response.toString());
+
+            }
+
+//            @Override
+//            public void getError(VolleyError error) {
+//                Log.e("lol",error.toString());
+//            }
+        });
+    }
+
     public void loginApiCall(){
-        String url = "http://www.onistays.com/api/v4/users/login";
+        String url = "http://www.onistays.com/oni-endpoint/user/login";
 
         final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header);
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
@@ -255,6 +302,7 @@ public class Login_page extends AppCompatActivity {
             }
         });
     }
+
 
 
     // checking if phone is valid or not
