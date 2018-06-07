@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginTop="20dp"
-                    android:text="First Name"
+                    android:text="Name"
                     android:textSize="@dimen/smallFontL"
                     />
 
@@ -56,14 +56,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginTop="20dp"
-                    android:text="Last Name"
+                    android:text="Password"
                     android:textSize="@dimen/smallFontL" />
 
                 <EditText
                     android:id="@+id/editTextLastName"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:theme="@style/EditTextTheme" />
             </LinearLayout>
         </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,14 +35,38 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
     EditText editTextFirstName,editTextLastName,editTextEmail,editTextMobile,editTextDoB;
     RadioGroup radioGroupGender;
     ImageView upload_photo;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     View v;
     String name = "";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        v =inflater.inflate(R.layout.user_registration_profile,container,false);        setWidgets(v);
+        v =inflater.inflate(R.layout.user_registration_profile,container,false);
+        setWidgets(v);
+        setDataifRegistered();
         return v;
     }
+
+    private void setDataifRegistered() {
+
+        sharedPreferences = getContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedPreferences.edit();
+
+
+        editTextFirstName.setText(sharedPreferences.getString("NAME",""));
+        editTextLastName.setText(" ");
+        editTextEmail.setText(sharedPreferences.getString("MAIL",""));
+        editTextMobile.setText(sharedPreferences.getString("CONTACT_NUMBER",""));
+        editTextDoB.setText(sharedPreferences.getString("DOB",""));
+        if((sharedPreferences.getString("GENDER","")).toLowerCase().equals("female")){
+            radioGroupGender.check(R.id.radioFemale);
+        }else {
+            radioGroupGender.check(R.id.radioMale);
+        }
+
+    }
+
     public void setWidgets(View v){
         //submitButton = v.findViewById(R.id.submitButton);
         submitButton1 = v.findViewById(R.id.addressSubmitBtn);
@@ -51,6 +76,7 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         editTextMobile = v.findViewById(R.id.editTextMobile);
         editTextDoB = v.findViewById(R.id.editTextDoB);
         radioGroupGender = v.findViewById(R.id.radioGroupGender);
+
         upload_photo = v.findViewById(R.id.upload_photo);
 
         editTextDoB.setFocusable(false);

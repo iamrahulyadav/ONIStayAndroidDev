@@ -417,7 +417,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         Menu menuItem = navigationView.getMenu();
         MenuItem profileMenuItem = menuItem.findItem(R.id.profile);
         if (getIntent().getStringExtra("Name").toLowerCase().equals("guest")) {
-            profileMenuItem.setTitle("Registration");
+             profileMenuItem.setTitle("Registration");
         } else {
             profileMenuItem.setTitle("Profile");
         }
