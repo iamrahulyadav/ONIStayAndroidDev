@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+
 public class Login_page extends AppCompatActivity {
     Button button,login_referalBtn;
     EditText login_editText, login_referalEditText;
@@ -42,11 +46,14 @@ public class Login_page extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
     Map<String, String> header;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         login_referalEditText = findViewById(R.id.login_referalEditText);
         login_referalEditText.setVisibility(View.INVISIBLE);
         button = findViewById(R.id.login_verifybutton);
@@ -127,14 +134,17 @@ public class Login_page extends AppCompatActivity {
 
         String url = "http://www.onistays.com/oni-endpoint/oni_user_auth/"+number;
         final VolleyAPICallJsonObject volleyAPICallJsonObject = new VolleyAPICallJsonObject(this,url);
+        progressBar.setVisibility(View.VISIBLE);
         volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
                 Log.e("VOLLEY", "RES" + response);
                 if (response == null) {
 
                 } else {
                     parsingtheResponseData(response);
+
                 }
 
             }
@@ -142,6 +152,7 @@ public class Login_page extends AppCompatActivity {
                     @Override
                     public void getError(VolleyError error) {
                         Log.e("VOLLEY", "RES" + error);
+                        progressBar.setVisibility(View.GONE);
 //                        if (error != null) {
 //                            String errorCheck = "org.json.JSONException: Value null of type org.json.JSONObject$1 cannot be converted to JSONObject";
 //                            Log.e("check", error.getMessage());
@@ -252,46 +263,29 @@ public class Login_page extends AppCompatActivity {
 
     }
 
-    private void forgotApi()
-    {
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "http://www.onistays.com/oni-endpoint/user/request_new_password";
+    private void forgotApi() {
+        String url = "http://www.onistays.com/oni-endpoint-xml/user/request_new_password";
         HashMap header1 = new HashMap<>();
-        header1.put("name",sharedpreferences.getString("MAIL",""));
-
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.e("check",response);
-
-
-            }
-        }, new Response.ErrorListener() {
-           @Override
-           public void onErrorResponse(VolleyError error) {
-                Log.e("Check",error.toString());
-            }
-        }){
-
-
-                        @Override
-                        protected Map<String,String> getParams(){
-                        Map<String,String> params = new HashMap<String, String>();
-                        params.put("name","neha@jhd.fdg");
-
-                        return params;
-                    }
+        header1.put("name", sharedpreferences.getString("MAIL", ""));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        SimpleXmlRequest<result> simpleRequest = new SimpleXmlRequest<result>(Request.Method.POST, url, result.class, header1,
+                new Response.Listener<result>() {
                     @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String,String> params = new HashMap<String, String>();
-                        params.put("Content-Type","application/x-www-form-urlencoded");
-                        return params;
+                    public void onResponse(result response) {
+                        // response Object
+                        Log.e("response",response.toString());
+
                     }
-
-      };
-        requestQueue.add(stringRequest);
-
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error Object
+                        Log.e("error",error.toString());
+                    }
+                }
+        );
+        requestQueue.add(simpleRequest);
     }
 
 
