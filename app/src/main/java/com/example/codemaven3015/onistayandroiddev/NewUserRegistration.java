@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -37,15 +50,16 @@ import java.util.regex.Pattern;
 
 public class NewUserRegistration extends android.support.v4.app.Fragment {
     Button submitButton1;
-    EditText editTextFirstName,editTextLastName,editTextEmail,editTextMobile,editTextDoB;
+    EditText editTextFirstName, editTextLastName, editTextEmail, editTextMobile, editTextDoB;
     RadioGroup radioGroupGender;
     ImageView upload_photo;
     View v;
     String name = "";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        v =inflater.inflate(R.layout.user_registration_profile,container,false);
+        v = inflater.inflate(R.layout.user_registration_profile, container, false);
 
         setWidgets(v);
         selectImageProfile();
@@ -64,7 +78,7 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
     }
 
 
-    public void setWidgets(View v){
+    public void setWidgets(View v) {
         //submitButton = v.findViewById(R.id.submitButton);
         submitButton1 = v.findViewById(R.id.addressSubmitBtn);
         editTextFirstName = v.findViewById(R.id.editTextFirstName);
@@ -75,14 +89,15 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
         radioGroupGender = v.findViewById(R.id.radioGroupGender);
         upload_photo = v.findViewById(R.id.upload_photo);
         editTextDoB.setFocusable(false);
-        MyEditTextDatePicker myEditTextDatePicker = new MyEditTextDatePicker(getContext(),editTextDoB);
+        MyEditTextDatePicker myEditTextDatePicker = new MyEditTextDatePicker(getContext(), editTextDoB);
         submitButton1.setVisibility(View.VISIBLE);
     }
-    public void selectImageProfile(){
+
+    public void selectImageProfile() {
         upload_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent();//(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent i = new Intent();//(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_GET_CONTENT);
                 i.putExtra("crop", "true");
@@ -91,7 +106,7 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
                 i.putExtra("scale", true);
                 i.putExtra("return-data", true);
                 // i.p
-                startActivityForResult(Intent.createChooser(i,"Select Profile Picture"),10);
+                startActivityForResult(Intent.createChooser(i, "Select Profile Picture"), 10);
             }
         });
 
@@ -111,37 +126,91 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             upload_photo.setImageDrawable(roundedBitmapDrawable);
         }
     }
-    private Bitmap getScaledBitmap(Uri uri){
-        Bitmap thumb = null ;
+
+    private Bitmap getScaledBitmap(Uri uri) {
+        Bitmap thumb = null;
         try {
             ContentResolver cr = getActivity().getContentResolver();
             InputStream in = cr.openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize=4;
-            thumb = BitmapFactory.decodeStream(in,null,options);
+            options.inSampleSize = 4;
+            thumb = BitmapFactory.decodeStream(in, null, options);
         } catch (FileNotFoundException e) {
         }
-        return thumb ;
+        return thumb;
     }
 
-    public void sendDataToServer(){
+    public void sendDataToServer() {
 
-        if(checkForValidation()) {
-            String firstName, lastName, dob, email, phone, gender;
+        if (checkForValidation()) {
+            String firstName, password, dob, email, phone, gender;
             firstName = editTextFirstName.getText().toString().trim();
-            lastName = editTextLastName.getText().toString().trim();
+            password = editTextLastName.getText().toString().trim();
             dob = editTextDoB.getText().toString().trim();
             email = editTextEmail.getText().toString().trim();
             phone = editTextMobile.getText().toString().trim();
             RadioButton radioButton = v.findViewById(radioGroupGender.getCheckedRadioButtonId());
             gender = radioButton.getText().toString();
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("clientSurvey", "1");
-        }else {
+            JSONObject reg = new JSONObject();
+            try {
+                reg.put("name", firstName);
+                reg.put("mail", email);
+                reg.put("pass", password);
+                reg.put("status", "1");
+                reg.put("field_contact_number", arrayParamFormat(phone));
+                reg.put("field_gender", arrayParamFormat(gender));
+                reg.put("field_dob", arrayParamFormat(dob));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            registraionApi(reg);
+        } else {
             return;
         }
 
     }
+
+    private void registraionApi(JSONObject object) {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String url = "http://www.onistays.com/oni-endpoint/user/register";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.e("response", response.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ONI", "INSIDE ERROR CALLBACK");
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers1 = new HashMap<String, String>();
+                headers1.put("Content-Type", "application/json; charset=utf-8; raw");
+
+                return headers1;
+            }
+
+        };
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+    public JSONObject arrayParamFormat(String string) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("value", string);
+        jsonArray.put(jsonObject);
+
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("und", jsonArray);
+        return jsonObject1;
+    }
+
+
     public boolean getSelectedIndex(){
         int selectedIndex = radioGroupGender.getCheckedRadioButtonId();
         if(selectedIndex<0){

@@ -1,6 +1,5 @@
 package com.example.codemaven3015.onistayandroiddev;
 
-import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,9 +14,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,14 +36,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -63,10 +56,11 @@ import java.util.Map;
 public class
 Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     TextView greeting_textView;
+    SearchView searchbar;
     GridView androidGridView;
     ImageButton menuBar_imgBtn,notification_imgBtn;
     DrawerLayout drawer;
-    Button City_Btn;
+    Button City_Btn,searchBtn;
     Menu menu;
     Spinner SearchFor_sppiner,searchCity_spinner;
     RecyclerView recyclerView,offerRecyclerView,product_RecyclerView;
@@ -96,15 +90,51 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         setGridData();
         greeting_textView=findViewById(R.id.greeting_textView);
         menuBar_imgBtn=findViewById(R.id.menuBar_imgBtn);
-        City_Btn=findViewById(R.id.City_Btn);
-        City_Btn.setOnClickListener(new View.OnClickListener() {
+
+        //search view
+        searchBtn=findViewById(R.id.searchBtn);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent i = new Intent(Home.this, AllLocationsActivity.class);
-                startActivity(i);
+                //Toast.makeText(this, "Good Morning", Toast.LENGTH_SHORT).show();
+                if(searchbar.getQuery().equals("")) {
+                    Toast.makeText(getApplicationContext(), "enter what you want to search", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent i = new Intent(Home.this, Site_listView.class);
+                    i.putExtra("fromWhere", "search");
+                    i.putExtra("SEARCH", searchbar.getQuery());
+                    i.putExtra("UID", 0);
+                    startActivity(i);
+                }
             }
         });
+
+        searchbar=findViewById(R.id.searchbar);
+        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(query.equals("")){
+                    Toast.makeText(getApplicationContext(), "enter what you want to search", Toast.LENGTH_LONG).show();
+                }else {
+
+                    Intent i = new Intent(Home.this, Site_listView.class);
+                    i.putExtra("fromWhere","search");
+                    i.putExtra("SEARCH", query);
+                    i.putExtra("UID", 0);
+                    startActivity(i);
+
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         menuBar_imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +171,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                 if(position>=1) {
                     String tid = cityId.get(selectedItem);
                     Intent i = new Intent(Home.this, Site_listView.class);
+                    i.putExtra("fromWhere","city");
                     i.putExtra("CITY", selectedItem);
                     i.putExtra("UID", tid);
                     startActivity(i);
@@ -472,6 +503,10 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         } else if (id == R.id.invite) {
             i = new Intent(Home.this,ShareAndEarn.class);
             startActivity(i);
+
+        }  else if (id == R.id.logout) {
+            logoutApi();
+
         }else if (id == R.id.menu_callUs){
             askPermissionForCall();
         }else if (id == R.id.menu_emailUs){
@@ -488,6 +523,31 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         drawer.closeDrawer(GravityCompat.END);
         return true;
     }
+
+    private void logoutApi()
+    {
+
+        String url="http://www.onistays.com/oni-endpoint/user/logout";
+        final VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response)
+            {
+
+
+
+
+            }
+
+            @Override
+            public void getError(VolleyError error)
+            {
+
+            }
+        });
+
+    }
+
     //email permission check
     public void askPermissionForMail(){
         Contact_Us contact_us = new Contact_Us(this);

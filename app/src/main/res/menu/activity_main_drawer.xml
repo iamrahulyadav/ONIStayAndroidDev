@@ -18,10 +18,18 @@
         android:id="@+id/services"
         android:icon="@drawable/booking"
         android:title="Service History" />
+
+
     <item
         android:id="@+id/invite"
         android:icon="@drawable/invite"
         android:title="Invite $ Earn" />
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_power_settings_new_black_32"
+        android:title="Logout" />
+
     <item
             android:title="Contact Us"
             android:id="@+id/menu_contact_us"

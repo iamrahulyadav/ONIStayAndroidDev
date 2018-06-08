@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 
 public class Login_page extends AppCompatActivity {
     Button button,login_referalBtn;

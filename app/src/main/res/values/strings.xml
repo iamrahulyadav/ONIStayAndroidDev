@@ -110,5 +110,8 @@
     <string name="tab_text_1">PROFILE</string>
     <string name="tab_text_2">ADDRESS</string>
     <string name="tab_text_3">ID CARD</string>
+    <string name="error_title">Error</string>
+    <string name="error_message">Property not found</string>
+    <string name="error_ok_button_text">Ok</string>
 
 </resources>

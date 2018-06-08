@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class Site_listView extends AppCompatActivity {
     LinearLayout backApp_Bar,appmenuLL;
     Button EditBack_btn;
     ImageButton backButton;
+    ProgressDialog dialog;
 
 
 // HARPREET
@@ -49,6 +51,7 @@ public class Site_listView extends AppCompatActivity {
         setContentView(R.layout.activity_site_list_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        dialog = new ProgressDialog(this);
         headerText = findViewById(R.id.headerText);
         headerText.setText("Select Property");
         appmenuLL = findViewById(R.id.appmenuLL);
@@ -92,18 +95,51 @@ public class Site_listView extends AppCompatActivity {
         });
     }
 
+    private void alertUserAboutError()
+    {
+        AlertDialogFragment alertDialogFragment = new AlertDialogFragment();
+        alertDialogFragment.show(getFragmentManager(), "error_dialog");
+//        Intent intent=new Intent(this,Home.class);
+//        startActivity(intent);
+
+
+    }
+
     private void setDataToListView() {
-        String url = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=";
-         url = url+getIntent().getStringExtra("CITY");
-        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this,url);
+        String url = "";
+        dialog.show();
+        if(getIntent().getStringExtra("fromWhere").equals("city")) {
+            url  = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=";
+            url = url + getIntent().getStringExtra("CITY");
+
+        }else{
+            url = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=''&args[1]=";
+            url = url + getIntent().getStringExtra("SEARCH");
+
+
+        }
+
+        final VolleyAPICall volleyAPICallJsonObject1 = new VolleyAPICall(this, url);
         volleyAPICallJsonObject1.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
             @Override
             public void getResponse(JSONArray response) {
-                Log.e("check",response.toString());
-                adapter=new Card_layout(getApplicationContext(),"SiteList",response);
-                int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-                recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"list"));
-                recyclerView.setAdapter(adapter);
+                dialog.setMessage("Searching......");
+                dialog.dismiss();
+                Log.e("check", response.toString());
+                if(response.length()<=0)
+                {
+//                    showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+//                    showAlertMessage.showMessage();
+
+                    alertUserAboutError();
+
+
+                }else {
+                    adapter = new Card_layout(getApplicationContext(), "SiteList", response);
+                    int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+                    recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels, "list"));
+                    recyclerView.setAdapter(adapter);
+                }
             }
         });
 

@@ -32,7 +32,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +47,7 @@ import in.shadowfax.proswipebutton.ProSwipeButton;
 public class Product_Image_page extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     //Harpreet
     android.support.v4.view.ViewPager ViewPager;
+    Map<String, String> header;
     boolean isFavourite = false;
     LinearLayout backApp_Bar,appmenuLL;
     Button EditBack_btn,bookNowButton,buttonOccupany1;
@@ -56,13 +63,14 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private ImageButton getDropIn_imgBtn,rating_imgbtn;
     private TextView getDropIn_textView,getMonth_textView,getDropOut_textView;
     String[] country = { "Select","Month", "3 Months", "6 Months", "9 Months", "12 Months"};
-    private Spinner getMonth_Spinner;
+    private Spinner getMonth_Spinner,occupancy,bed;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product__image_page);
+        bookingApi();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         headerText = findViewById(R.id.headerText);
@@ -120,6 +128,14 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         getDropIn_imgBtn=findViewById(R.id.getDropIn_imgBtn);
         //updateDisplayOut();
         updateDisplay();
+
+
+        ////Spinner for occupancy
+        occupancy=findViewById(R.id.occupancy);
+        bed=findViewById(R.id.bed);
+
+
+
         getDropIn_imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +180,24 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new myTimerTask(), 4000 ,4000);
     }
+
+    private void bookingApi()
+    {
+        String url="http://www.onistays.com/bookinf/api/1.1/booking_home";
+        VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+
+            }
+        });
+    }
+
     public void setDurationSpinner(){
         getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
         getMonth_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
