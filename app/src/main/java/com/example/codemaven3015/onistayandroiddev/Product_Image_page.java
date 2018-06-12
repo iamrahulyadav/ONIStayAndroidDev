@@ -341,10 +341,10 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                 String text = parent.getItemAtPosition(position).toString();
                // showMessage showAlertMessage;
                 if (getDropIn_textView.getText().toString().isEmpty()) {
-                    showMessage("Info","Please select DropIn Date");
+                   // showMessage("Info","Please select DropIn Date");
                 } else {
                     if (text.toLowerCase().equals("select")) {
-                        showMessage("info","Please select duration");
+                      //  showMessage("info","Please select duration");
                     }else {
                         switch (position){
                             //to update outTime

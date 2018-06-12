@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -93,6 +94,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
 
         //search view
         searchBtn=findViewById(R.id.searchBtn);
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +113,9 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         });
 
         searchbar=findViewById(R.id.searchbar);
+        searchbar.setQueryHint("Where you want to stay");
+        //EditText et= (EditText) findViewById(R.id.searchbar);
+        //et.setHint("Where you want to stay");
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -196,7 +201,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                 public void getResponse(JSONObject response) {
                     Log.e("city",response.toString());
                     List<String> city = new ArrayList<String>();
-                    city.add("Select City");
+                    city.add("City");
                     //city.add("City");
                     cityId =  new HashMap<String, String>();
                     for(Iterator<String> iter = response.keys(); iter.hasNext();) {

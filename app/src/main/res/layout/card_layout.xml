@@ -90,6 +90,7 @@
 
             <TextView
                 android:id="@+id/hotel_textView"
+                android:maxLines="1"
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
@@ -123,6 +124,7 @@
 
         <TextView
             android:id="@+id/address_textView"
+            android:maxLines="1"
             android:layout_width="300dp"
             android:layout_height="27dp"
             android:layout_marginLeft="15dp"

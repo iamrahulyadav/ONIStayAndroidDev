@@ -76,6 +76,7 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         editTextMobile = v.findViewById(R.id.editTextMobile);
         editTextDoB = v.findViewById(R.id.editTextDoB);
         radioGroupGender = v.findViewById(R.id.radioGroupGender);
+        submitButton1.setVisibility(View.INVISIBLE);
 
         upload_photo = v.findViewById(R.id.upload_photo);
 

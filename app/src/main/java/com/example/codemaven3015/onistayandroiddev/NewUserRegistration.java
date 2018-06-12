@@ -72,6 +72,7 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
 
     private void OnClickButtonSubmit() {
         submitButton1.setText("Register");
+        submitButton1.setVisibility(View.VISIBLE);
         submitButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

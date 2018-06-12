@@ -52,8 +52,7 @@
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@drawable/button_bg_color"
-                    android:queryHint="Where you want to stay"></SearchView>
+                    android:background="@drawable/button_bg_color"></SearchView>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
@@ -210,6 +209,7 @@
                 android:background="@color/dark_grey" />
             <TextView
                 android:id="@+id/textview_deals"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lineSeprator3"
@@ -221,6 +221,7 @@
                 android:textStyle="bold" />
 
             <include layout="@layout/deals_grid"
+                android:visibility="gone"
                 android:layout_below="@+id/textview_deals"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"/>

@@ -73,16 +73,16 @@ public class Login_page extends AppCompatActivity {
         });
         login_editText = findViewById(R.id.login_editText);
         login_referalBtn = findViewById(R.id.login_referalBtn);
-        login_referalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(login_referalEditText.getVisibility() == View.VISIBLE) {
-                    login_referalEditText.setVisibility(View.INVISIBLE);
-                }else {
-                    login_referalEditText.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+//        login_referalBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(login_referalEditText.getVisibility() == View.VISIBLE) {
+//                    login_referalEditText.setVisibility(View.INVISIBLE);
+//                }else {
+//                    login_referalEditText.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
         permissionFlag = checkAndRequestPermissions();
 
         //login_editText.setVisibility(View.INVISIBLE);
@@ -273,6 +273,8 @@ public class Login_page extends AppCompatActivity {
                     @Override
                     public void onResponse(result response) {
                         // response Object
+                        Log.e("response",response.toString());
+                        progressBar.setVisibility(View.GONE);
                         showMessage("info","Check your email for reset new password");
 
                     }
@@ -281,11 +283,14 @@ public class Login_page extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error Object
+                        Log.e("error",error.toString());
+                        progressBar.setVisibility(View.GONE);
                       showMessage("info","Check your email for reset new password");
                     }
                 }
         );
         requestQueue.add(simpleRequest);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -307,11 +312,13 @@ public class Login_page extends AppCompatActivity {
 
     public void loginApiCall(){
         String url = "http://www.onistays.com/oni-endpoint/user/login";
+        progressBar.setVisibility(View.VISIBLE);
 
         final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header);
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
 
                 Log.e("lol",response.toString());
 
@@ -329,6 +336,7 @@ public class Login_page extends AppCompatActivity {
 
             @Override
             public void getError(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
 
                 showMessage("Info","You have entered an invalid phone number or password");
 

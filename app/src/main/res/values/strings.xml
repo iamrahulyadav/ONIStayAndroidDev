@@ -20,7 +20,7 @@
     <string name="title_activity_pay_now">PayNow</string>
     <string name="booking_confirmation"> YaY! Your booking is Confirmed</string>
     <string name="order_Id"> Order Id :- </string>
-    <string name="hotel_Name">ONISTAYS Romantic Red Tower</string>
+    <string name="hotel_Name">ONISTAYS Romantic Red Tower ONISTAYS Romantic Red Tower ONISTAYS Romantic Red Tower</string>
     <string name="hotel_address">Ashok Nagar, New Delhi</string>
 
     <string name="date">Fri 9th Feb 2018</string>
@@ -96,7 +96,7 @@
     </string-array>
 
     <string-array name="Search">
-        <item>Seach For</item>
+        <item>Gender</item>
         <item>Boys</item>
         <item>Girls</item>
     </string-array>
