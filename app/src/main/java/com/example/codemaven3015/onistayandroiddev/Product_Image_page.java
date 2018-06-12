@@ -35,8 +35,11 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Timer;
@@ -47,6 +50,7 @@ import in.shadowfax.proswipebutton.ProSwipeButton;
 public class Product_Image_page extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     //Harpreet
     android.support.v4.view.ViewPager ViewPager;
+    ArrayList<String> arrayImage = new ArrayList<String>();
     Map<String, String> header;
     boolean isFavourite = false;
     LinearLayout backApp_Bar,appmenuLL;
@@ -61,16 +65,17 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private int dotsCount;
     private ImageView[]dots;
     private ImageButton getDropIn_imgBtn,rating_imgbtn;
-    private TextView getDropIn_textView,getMonth_textView,getDropOut_textView;
+    private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
     String[] country = { "Select","Month", "3 Months", "6 Months", "9 Months", "12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product__image_page);
-        bookingApi();
+        //bookingApi();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         headerText = findViewById(R.id.headerText);
@@ -82,8 +87,23 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         EditBack_btn = findViewById(R.id.EditBack_btn);
         EditBack_btn.setVisibility(View.INVISIBLE);
         backButton = findViewById(R.id.backButton);
+        hotel_textView=findViewById(R.id.hotel_textView);
+        address_textView=findViewById(R.id.address_textView);
+        amountPrice=findViewById(R.id.amountPrice);
+        youSaved=findViewById(R.id.youSaved);
+        droppedPrice=findViewById(R.id.droppedPrice);
+        // FOR PAGER VIEW
+        ViewPager=findViewById(R.id.ViewPager);
+        SliderDots=findViewById(R.id.SliderDotes);
+
+        bookNowButton = findViewById(R.id.bookNowButton);
+        // FOR RATING BUTTON
+        rating_imgbtn = findViewById(R.id.rating_imgbtn);
+
+
+        setDataToDetailPage();
         setFavButton();
-        setOnEyeClick();
+
         setOnClickbuttonOccupany();
         onSwipeBookNowClick();
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +113,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                 startActivity(i);
             }
         });
-        bookNowButton = findViewById(R.id.bookNowButton);
+
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +125,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
 //for STAY DURATION
         setDurationSpinner();
-// FOR RATING BUTTON
-        rating_imgbtn = findViewById(R.id.rating_imgbtn);
+
         rating_imgbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,9 +133,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
 
-// FOR PAGER VIEW
-        ViewPager=findViewById(R.id.ViewPager);
-        SliderDots=findViewById(R.id.SliderDotes);
+
 // FOR SET THE CALENDER
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
@@ -142,7 +159,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                 showDialog(DATE_DIALOG_ID);
             }
         });
-        Product_Details__ViewPagerAdapter productDetailsViewPagerAdapter =new Product_Details__ViewPagerAdapter(this);
+
+    }
+
+    public void setPager(ArrayList<String> arrayImage){
+        Product_Details__ViewPagerAdapter productDetailsViewPagerAdapter =new Product_Details__ViewPagerAdapter(this,arrayImage);
         ViewPager.setAdapter(productDetailsViewPagerAdapter);
         dotsCount= productDetailsViewPagerAdapter.getCount();
         final ImageView[]dots = new ImageView[dotsCount];
@@ -179,6 +200,118 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         });
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new myTimerTask(), 4000 ,4000);
+    }
+
+    private void setDataToDetailPage() {
+        String details;
+        details = getIntent().getStringExtra("Details");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject = new JSONObject(details);
+            hotel_textView.setText(jsonObject.getString("title"));
+            address_textView.setText(jsonObject.getString("Address"));
+            amountPrice.setText(jsonObject.getString("Currency Symbol") + jsonObject.getString("Price"));
+            droppedPrice.setText("Priced Deopped " + jsonObject.getString("Discount") + "% Off");
+            int myNum = 0;
+            int price = 0;
+
+            try {
+                myNum = Integer.parseInt(jsonObject.getString("Discount"));
+                price = Integer.parseInt(jsonObject.getString("Price"));
+                price = (price * 100) / (myNum);
+            } catch (NumberFormatException nfe) {
+                System.out.println("Could not parse " + nfe);
+            }
+            youSaved.setText("You Saved " + jsonObject.getString("Currency Symbol") + price);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONArray imageArray = new JSONArray();
+        JSONArray serviceArray = new JSONArray();
+        try {
+            imageArray = jsonObject.getJSONArray("Gallery Images");
+            serviceArray = jsonObject.getJSONArray("Services");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (imageArray != null) {
+            for (int i = 0; i < imageArray.length(); i++) {
+                try {
+                    arrayImage.add(imageArray.getString(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setPager(arrayImage);
+            setOnEyeClick();
+            try {
+                setServicesData(serviceArray);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setServicesData(JSONArray serviceArray) throws JSONException {
+        for(int i = 0; i< serviceArray.length();i++){
+            LinearLayout linearLayout;
+            switch(serviceArray.getString(i)){
+
+                case "ONI Breakfast":
+                    linearLayout = findViewById(R.id.Breakfast);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case "AC":
+                    linearLayout = findViewById(R.id.ac);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "WATER":
+                    linearLayout = findViewById(R.id.water);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Free WIFI":
+                    linearLayout = findViewById(R.id.wifi);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Geyser":
+                    linearLayout = findViewById(R.id.Geyser);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+                case "Parking Facility":
+                    linearLayout = findViewById(R.id.parking);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Power backup":
+                    linearLayout = findViewById(R.id.power);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Complementary Refreshment":
+                    linearLayout = findViewById(R.id.Refreshment);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Lift/Elevator":
+                    linearLayout = findViewById(R.id.lift);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+                case "Seating Area":
+                    linearLayout = findViewById(R.id.seating_area);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    break;
+
+
+            }
+        }
     }
 
     private void bookingApi()
@@ -339,6 +472,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 public void navigateToView(){
     Intent i = new Intent(Product_Image_page.this,Site_Image_View.class);
     i.putExtra("IN_VIEW_IMAGE","true");
+    i.putStringArrayListExtra("images", arrayImage);
     this.startActivity(i);
 }
     private void ratingView(View v) {

@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,20 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
             show_imageBtn = (ImageButton) itemView.findViewById(R.id.show_imageBtn);
             rating_imgbtn = (ImageButton) itemView.findViewById(R.id.rating_imgbtn);
             fav_imageBtn.setTag("blank");
+            hotel_image=itemView.findViewById(R.id.hotel_image) ;
+            hotel_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject=list.getJSONObject(position);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    startDetailsActivity(jsonObject);
+                }
+            });
             if(fromWhere.equals("SiteList")){
                 fav_imageBtn.setVisibility(View.VISIBLE);
                 show_imageBtn.setImageDrawable(context.getResources().getDrawable(R.drawable.eye));
@@ -77,9 +92,32 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
                 show_imageBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(context,Site_Image_View.class);
-                        i.putExtra("IN_VIEW_IMAGE","false");
-                        context.startActivity(i);
+                        int position = getAdapterPosition();
+                        JSONObject obj = new JSONObject();
+                        JSONArray imageArray = new JSONArray();
+                        ArrayList<String> arrayImage = new ArrayList<String>();
+
+                        try {
+                            obj = list.getJSONObject(position);
+                            imageArray = obj.getJSONArray("Gallery Images");
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (imageArray != null) {
+                            for (int i = 0; i < imageArray.length(); i++) {
+                                try {
+                                    arrayImage.add(imageArray.getString(i));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            Intent i = new Intent(context, Site_Image_View.class);
+                            i.putExtra("IN_VIEW_IMAGE", "false");
+                            i.putStringArrayListExtra("images", arrayImage);
+                            context.startActivity(i);
+                        }
                     }
                 });
             }else if(fromWhere.equals("Wishlist")){
@@ -122,7 +160,7 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
 
 
 
-            hotel_image=itemView.findViewById(R.id.hotel_image) ;
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -187,12 +225,7 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
         }
 
 
-        viewHolder.hotel_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDetailsActivity();
-            }
-        });
+
         viewHolder.rating_imgbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,8 +243,9 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
 
 
     }
-    public void startDetailsActivity(){
+    public void startDetailsActivity(JSONObject jsonObject){
         Intent i=new Intent(context,Product_Image_page.class);
+        i.putExtra("Details",jsonObject.toString());
         context.startActivity(i);
     }
     @Override

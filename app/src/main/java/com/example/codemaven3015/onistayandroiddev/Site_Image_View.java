@@ -4,6 +4,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,8 +36,8 @@ public class  Site_Image_View extends AppCompatActivity {
         appmenuLL_Back.setVisibility(View.VISIBLE);
         ViewPager=findViewById(R.id.viewPagerImageDetails);
         SliderDots=findViewById(R.id.SliderDotes);
-
-        Product_Details__ViewPagerAdapter productDetailsViewPagerAdapter =new Product_Details__ViewPagerAdapter(this);
+        Log.e("check",getIntent().getStringArrayListExtra("images").toString());
+        Product_Details__ViewPagerAdapter productDetailsViewPagerAdapter =new Product_Details__ViewPagerAdapter(this, getIntent().getStringArrayListExtra("images"));
         ViewPager.setAdapter(productDetailsViewPagerAdapter);
         dotsCount= productDetailsViewPagerAdapter.getCount();
         final ImageView[]dots = new ImageView[dotsCount];

@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
 /**
  * Created by Admin on 2/2/2018.
  */
@@ -22,18 +26,21 @@ class Product_Details__ViewPagerAdapter extends PagerAdapter {
     ,R.drawable.hotel6,R.drawable.hotel7,R.drawable.hotel8};
     GridView androidGridView;
 
+    private ArrayList<String> arrayImage = new ArrayList<String>();
+
     String[] gridViewString = {"Room 1", "Room 2", "Room 3", "Room 4", "CRIME", "ENTERTAINMENT"} ;
     int[] gridViewImageId = {
             R.drawable.bed_grey, R.drawable.bed_grey, R.drawable.bed_grey, R.drawable.bed_grey, R.drawable.bed_grey, R.drawable.bed_grey
     };
 
 
-    public Product_Details__ViewPagerAdapter(Context context){
+    public Product_Details__ViewPagerAdapter(Context context,ArrayList<String> arrayImage){
         this.context=context;
+        this.arrayImage = arrayImage;
     }
     @Override
     public int getCount(){
-        return images.length;
+        return arrayImage.size();
     }
     @Override
     public boolean isViewFromObject(View view,Object object){
@@ -44,7 +51,11 @@ class Product_Details__ViewPagerAdapter extends PagerAdapter {
         layoutInflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view=layoutInflater.inflate(R.layout.custom_layout,null);
         ImageView imageView=(ImageView)view.findViewById(R.id.CustomImage);
-        imageView.setImageResource(images[Position]);
+        //imageView.setImageResource(images[Position]);
+        Picasso
+                .with(context)
+                .load(arrayImage.get(Position))
+                .into(imageView);
         ViewPager vp=(ViewPager)container;
         vp.addView(view,0);
         String flag = ((Activity) context).getIntent().getStringExtra("IN_VIEW_IMAGE");

@@ -51,7 +51,7 @@ public class ServicesAdapter  extends RecyclerView.Adapter<ServicesAdapter.ViewH
     };
     private String[] text={
             "Help Me",
-            "Water",
+            "A.C",
             "Breakfast",
             "Lunch",
             "Dinner",
