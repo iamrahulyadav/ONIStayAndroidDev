@@ -111,6 +111,7 @@ public class Site_listView extends AppCompatActivity {
         if(getIntent().getStringExtra("fromWhere").equals("city")) {
             url  = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=";
             url = url + getIntent().getStringExtra("CITY");
+            url=url+"&args[1]=''";
 
         }else{
             url = "http://www.onistays.com/stateapi/v1.1/property-state?args[0]=''&args[1]=";

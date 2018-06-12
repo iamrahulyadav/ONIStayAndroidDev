@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -22,6 +24,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -214,8 +217,8 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
     public boolean getSelectedIndex(){
         int selectedIndex = radioGroupGender.getCheckedRadioButtonId();
         if(selectedIndex<0){
-            showAlertMessage showAlertMessage = new showAlertMessage(getContext(),"Please select gender","Info");
-            showAlertMessage.showMessage();
+            showMessage("Info","Please select gender");
+
             return false;
         }else {
             return true;
@@ -268,6 +271,23 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             return false;
         }
         return true;
+    }
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
     }
 
 }

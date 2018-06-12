@@ -2,11 +2,16 @@ package com.example.codemaven3015.onistayandroiddev;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +26,15 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by CodeMaven3015 on 3/16/2018.
  */
@@ -29,6 +43,15 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
     RecyclerView address_recycler_view;
     private RecyclerView.LayoutManager rvLayoutManager;
     ImageView imageView;
+    TextView save;
+    EditText address1EditText,pinCodeEditText,phoneEditText,stateEdit,cityEdit;
+    RadioButton homeRadio,officeRadio;
+    RadioGroup typeAddressRadioGroup;
+    Map<String, String> header;
+
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedpreferences;
+
 
     @Nullable
     @Override
@@ -37,6 +60,8 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         address_recycler_view = view.findViewById(R.id.address_recycler_view);
         rvLayoutManager = new LinearLayoutManager(getActivity());
         address_recycler_view.setLayoutManager(rvLayoutManager);
+        sharedpreferences = getContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedpreferences.edit();
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         address_recycler_view.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"Address"));
         AddressAdapter addressAdapter = new AddressAdapter(getContext());
@@ -63,8 +88,91 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
                 dialog.dismiss();
             }
         });
+        address1EditText=dialog.findViewById(R.id.address1EditText);
+        pinCodeEditText=dialog.findViewById(R.id.pinCodeEditText);
+        phoneEditText=dialog.findViewById(R.id.phoneEditText);
+        stateEdit=dialog.findViewById(R.id.stateEdit);
+        cityEdit=dialog.findViewById(R.id.cityEdit);
+        typeAddressRadioGroup=dialog.findViewById(R.id.typeAddressRadioGroup);
+        homeRadio=dialog.findViewById(R.id.homeRadio);
+        officeRadio=dialog.findViewById(R.id.officeRadio);
+
+
+
+        save=dialog.findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkValidation()){
+                    String address, pin_code, phone_number, state, city,address_type;
+
+                    address = address1EditText.getText().toString().trim();
+                    pin_code = pinCodeEditText.getText().toString().trim();
+                    phone_number = phoneEditText.getText().toString().trim();
+                    state = stateEdit.getText().toString().trim();
+                    city = cityEdit.getText().toString().trim();
+                    RadioButton radioButton = v.findViewById(typeAddressRadioGroup.getCheckedRadioButtonId());
+                    address_type = radioButton.getText().toString();
+                    header = new HashMap<>();
+                    header.put("uid",sharedpreferences.getString("USER_ID",""));
+                    header.put("address1",address);
+                    header.put("city",city);
+                    header.put("state",state);
+                    header.put("pin_code",pin_code);
+
+                    setAddressApi();
+                }
+            }
+
+        });
         dialog.show();
     }
+
+    private void setAddressApi()
+    {
+        String url = "http://www.onistays.com/oni-endpoint/user/login";
+
+        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(getContext(),url,header);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                homeAddress();
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+
+                showMessage("Info","Try again!!!!!");
+
+                //showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+                //showAlertMessage.showMessage();
+
+            }
+        });
+    }
+
+    private boolean checkValidation()
+    {
+        if(address1EditText.getText().toString().equals("")) {
+            address1EditText.setError("field Cannot be empty");
+            return false;
+        }else  if(pinCodeEditText.getText().toString().equals("")) {
+            pinCodeEditText.setError("field Cannot be empty");
+            return false;
+        }else  if(phoneEditText.getText().toString().equals("")) {
+            phoneEditText.setError("field Cannot be empty");
+            return false;
+        }else  if(stateEdit.getText().toString().equals("")) {
+            stateEdit.setError("field Cannot be empty");
+            return false;
+        }else  if(cityEdit.getText().toString().equals("")) {
+            cityEdit.setError("field Cannot be empty");
+            return false;
+        }
+        return true;
+        }
+
+
     public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
         private Context context;
 
@@ -138,7 +246,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
        }
        public void setOnclickSave(final Dialog dialog, final int position){
-           final TextView saveImageView = dialog.findViewById(R.id.saveImageView);
+           final TextView saveImageView = dialog.findViewById(R.id.save);
            saveImageView.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -174,5 +282,46 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         }
     }
 
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
+    }
+    public void homeAddress(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //builder.setCancelable(true);
+        builder.setTitle("Successfull");
+        builder.setMessage("Profile Updated");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(getContext() , Home.class);
+                startActivity(i);
+            }
+        });
+        builder.setNegativeButton("No", null);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
+    }
 
 }

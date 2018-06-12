@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
@@ -337,12 +339,12 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String text = parent.getItemAtPosition(position).toString();
-                showAlertMessage showAlertMessage;
+               // showMessage showAlertMessage;
                 if (getDropIn_textView.getText().toString().isEmpty()) {
-                    showAlertMessage = new showAlertMessage(getApplicationContext(), "Please select DropIn Date ", "info");
+                    showMessage("Info","Please select DropIn Date");
                 } else {
                     if (text.toLowerCase().equals("select")) {
-                        showAlertMessage = new showAlertMessage(getApplicationContext(), "Please select duration", "info");
+                        showMessage("info","Please select duration");
                     }else {
                         switch (position){
                             //to update outTime
@@ -556,7 +558,23 @@ public void navigateToView(){
                     //updateDisplayOut();
                 }
             };
-
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
+    }
 
 }
 

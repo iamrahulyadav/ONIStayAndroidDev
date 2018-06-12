@@ -273,7 +273,7 @@ public class Login_page extends AppCompatActivity {
                     @Override
                     public void onResponse(result response) {
                         // response Object
-                        Log.e("response",response.toString());
+                        showMessage("info","Check your email for reset new password");
 
                     }
                 },
@@ -281,7 +281,7 @@ public class Login_page extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error Object
-                        Log.e("error",error.toString());
+                      showMessage("info","Check your email for reset new password");
                     }
                 }
         );

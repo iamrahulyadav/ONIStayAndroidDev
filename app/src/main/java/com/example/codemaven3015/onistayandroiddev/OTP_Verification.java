@@ -2,12 +2,15 @@ package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -53,13 +56,13 @@ public class OTP_Verification extends AppCompatActivity {
     }
 
     public void onClickYes(){
-        showAlertMessage showAlertMessage = new showAlertMessage(this,"Do you want to change the mobile number?","");
-        showAlertMessage.showMessageWithYesAndNo(new showAlertMessage.YesAlertCallback() {
-            @Override
-            public void yesFunction() {
-                moveToLoginPage();
-            }
-        });
+        showMessage("","Do you want to change the mobile number?");
+//        showAlertMessage.showMessageWithYesAndNo(new showAlertMessage.YesAlertCallback() {
+//            @Override
+//            public void yesFunction() {
+//                moveToLoginPage();
+//            }
+//        });
     }
     public void moveToLoginPage(){
         Intent i = new Intent(OTP_Verification.this,Login_page.class);
@@ -96,6 +99,23 @@ public class OTP_Verification extends AppCompatActivity {
         super.onPause();
         if(!permissionFlags)
             LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
     }
 }
 

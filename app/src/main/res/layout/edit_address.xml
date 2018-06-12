@@ -23,7 +23,7 @@
             android:layout_alignParentLeft="true"/>
 
         <TextView
-            android:id="@+id/saveImageView"
+            android:id="@+id/save"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:layout_alignParentRight="true"
@@ -87,11 +87,14 @@
                 android:text="State"
                 android:textSize="@dimen/mediumFont" />
 
-            <Spinner
-                android:id="@+id/spinnerState"
+            <EditText
+                android:id="@+id/stateEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/country_array" />
+                android:layout_height="wrap_content" />
+            <!--<Spinner-->
+                <!--android:id="@+id/spinnerState"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"/>-->
         </LinearLayout>
 
         <LinearLayout
@@ -104,11 +107,15 @@
                 android:layout_height="wrap_content"
                 android:text="City"
                 android:textSize="@dimen/mediumFont" />
-
-            <Spinner
-                android:id="@+id/spinnerCity"
+            <EditText
+                android:id="@+id/cityEdit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <!--<Spinner-->
+                <!--android:id="@+id/spinnerCity"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
         </LinearLayout>
 
 
@@ -126,18 +133,20 @@
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-            <RadioButton
-                android:text="Home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/red_trans" />
+                <RadioButton
+                    android:id="@+id/homeRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/red_trans"
+                    android:text="Home" />
 
 
-            <RadioButton
-                android:text="Office/Commercial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/red_trans" />
+                <RadioButton
+                    android:id="@+id/officeRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/red_trans"
+                    android:text="Office/Commercial" />
 
             </RadioGroup>
         <Button
