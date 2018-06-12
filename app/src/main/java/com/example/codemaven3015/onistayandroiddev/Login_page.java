@@ -2,6 +2,7 @@ package com.example.codemaven3015.onistayandroiddev;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -327,8 +329,12 @@ public class Login_page extends AppCompatActivity {
 
             @Override
             public void getError(VolleyError error) {
-                showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
-                showAlertMessage.showMessage();
+
+                showMessage("Info","You have entered an invalid phone number or password");
+
+                //showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+                //showAlertMessage.showMessage();
+
             }
         });
     }
@@ -359,6 +365,24 @@ public class Login_page extends AppCompatActivity {
         }
         return true;
 
+    }
+
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
     }
 
 }
