@@ -158,8 +158,22 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
                 reg.put("pass", password);
                 reg.put("status", "1");
                 reg.put("field_contact_number", arrayParamFormat(phone));
-                reg.put("field_gender", arrayParamFormat(gender));
-                reg.put("field_dob", arrayParamFormat(dob));
+                reg.put("field_gender", arrayParamFormat(gender.toLowerCase()));
+
+
+                JSONArray jsonArray = new JSONArray();
+                JSONObject jsonObject = new JSONObject();
+                JSONObject obj = new JSONObject();
+                obj.put("month","8");
+                obj.put("year","2000");
+                obj.put("day","7");
+                obj.put("hour","0");
+                jsonObject.put("value", obj);
+                jsonArray.put(jsonObject);
+
+                JSONObject jsonObject1 = new JSONObject();
+                jsonObject1.put("und", jsonArray);
+                reg.put("field_dob", jsonObject1);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -184,17 +198,19 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             public void onErrorResponse(VolleyError error) {
                 Log.e("ONI", "INSIDE ERROR CALLBACK");
             }
-        }) {
-
-            @Override
+        })
+        {
+         @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers1 = new HashMap<String, String>();
-                headers1.put("Content-Type", "application/json; charset=utf-8; raw");
+            HashMap<String, String> headers = new HashMap<String, String>();
+            headers.put("Content-Type", "application/json; charset=utf-8");
+            return headers;
+        }
 
-                return headers1;
-            }
 
-        };
+
+    }
+        ;
         requestQueue.add(jsonObjectRequest);
 
     }
