@@ -3,6 +3,7 @@ package com.example.codemaven3015.onistayandroiddev;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -56,6 +57,9 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
     EditText editTextFirstName, editTextLastName, editTextEmail, editTextMobile, editTextDoB;
     RadioGroup radioGroupGender;
     ImageView upload_photo;
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+    String firstName, password, dob, email, phone, gender;
     View v;
     String name = "";
 
@@ -65,6 +69,7 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
         v = inflater.inflate(R.layout.user_registration_profile, container, false);
 
         setWidgets(v);
+
         selectImageProfile();
         OnClickButtonSubmit();
         return v;
@@ -84,11 +89,22 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
 
     public void setWidgets(View v) {
         //submitButton = v.findViewById(R.id.submitButton);
+        sharedpreferences = getContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedpreferences.edit();
         submitButton1 = v.findViewById(R.id.addressSubmitBtn);
         editTextFirstName = v.findViewById(R.id.editTextFirstName);
         editTextLastName = v.findViewById(R.id.editTextLastName);
         editTextEmail = v.findViewById(R.id.editTextEmail);
         editTextMobile = v.findViewById(R.id.editTextMobile);
+        editTextMobile.setFocusable(false);
+        editTextMobile.setText(sharedpreferences.getString("CONTACT_NUMBER",""));
+        editTextMobile.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                      showMessage("Info","Phone number cannot be changed");
+               }
+          }
+        );
         editTextDoB = v.findViewById(R.id.editTextDoB);
         radioGroupGender = v.findViewById(R.id.radioGroupGender);
         upload_photo = v.findViewById(R.id.upload_photo);
@@ -147,12 +163,12 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
     public void sendDataToServer() {
 
         if (checkForValidation()) {
-            String firstName, password, dob, email, phone, gender;
+
             firstName = editTextFirstName.getText().toString().trim();
             password = editTextLastName.getText().toString().trim();
             dob = editTextDoB.getText().toString().trim();
             email = editTextEmail.getText().toString().trim();
-            phone = editTextMobile.getText().toString().trim();
+            phone = sharedpreferences.getString("CONTACT_NUMBER","");//editTextMobile.getText().toString().trim();
             RadioButton radioButton = v.findViewById(radioGroupGender.getCheckedRadioButtonId());
             gender = radioButton.getText().toString();
             JSONObject reg = new JSONObject();
@@ -162,7 +178,7 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
                 reg.put("pass", password);
                 reg.put("status", "1");
                 reg.put("field_contact_number", arrayParamFormat(phone));
-                reg.put("field_gender", arrayParamFormat(gender.toLowerCase()));
+                reg.put("field_gender", arrayParamFormatGender(gender.toLowerCase()));
 
 
                 JSONArray jsonArray = new JSONArray();
@@ -195,19 +211,34 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
                 Log.e("response", response.toString());
+                try {
+                    editor.putString("USER_ID",response.getString("uid"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                editor.putString("NAME",firstName);
+                editor.putString("MAIL",email);
+                editor.putString("GENDER",gender);
+                editor.putString("DOB",dob);
+                editor.commit();
+                showMessage("Info","Profile Updated");
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
                 Log.e("ONI", "INSIDE ERROR CALLBACK");
+                showMessage("Info","Email id or phone number already taken");
             }
         })
         {
          @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
             HashMap<String, String> headers = new HashMap<String, String>();
-            headers.put("Content-Type", "application/json; charset=utf-8");
+            headers.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
             return headers;
         }
 
@@ -229,6 +260,20 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
         jsonObject1.put("und", jsonArray);
         return jsonObject1;
     }
+
+    public JSONObject arrayParamFormatGender(String string) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONArray ar = new JSONArray();
+        ar.put(string);
+        jsonObject.put("value", ar);
+        jsonArray.put(jsonObject);
+
+        JSONObject jsonObject1 = new JSONObject();
+        jsonObject1.put("und", ar);
+        return jsonObject1;
+    }
+
 
 
     public boolean getSelectedIndex(){
@@ -269,8 +314,8 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             editTextMobile.setError("Please enter valid Phone number ");
             return false;
         }
-        if(editTextMobile.getText().toString().isEmpty()){
-            editTextMobile.setError("Please select DoB ");
+        if(editTextDoB.getText().toString().isEmpty()){
+            editTextDoB.setError("Please select DoB ");
             return false;
         }
         return true;
