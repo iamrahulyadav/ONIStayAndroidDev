@@ -193,7 +193,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     }
 
     private void apiCalltogetCity() {
-            String url = "http://www.onistays.com/api/v1.1/oni_state_city/2";
+            String url = "http://www.onistays.com/oni-endpoint/oni_state_city/2";
 
             final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url);
             volleyAPICallJsonObject1.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
@@ -277,7 +277,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     }
     //apicall for featured property
     public void apiCallForFeaturedProperty(){
-        String url = "http://www.onistays.com/api/v1/features_prop";
+        String url = "http://www.onistays.com/oni-endpoint/features_prop";
 
         final VolleyAPICall volleyAPICall = new VolleyAPICall(this,url);
         volleyAPICall.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
@@ -372,7 +372,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     //apicall for offer Image
     public void apiCallForofferImage(){
         home_firstImage = findViewById(R.id.home_firstImage);
-        String url = "http://www.onistays.com/api/v2/homebanner";
+        String url = "http://www.onistays.com/oni-endpoint/homebanner";
         final VolleyAPICall volleyAPICall1 = new VolleyAPICall(this,url);
         volleyAPICall1.executeRequest(Request.Method.GET, new VolleyAPICall.VolleyCallback() {
                     @Override

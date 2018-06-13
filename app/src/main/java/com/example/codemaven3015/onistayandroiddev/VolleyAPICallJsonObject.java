@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -26,13 +27,14 @@ public class VolleyAPICallJsonObject {
     Context context;
     RequestQueue requestQueue;
     private Map<String, String> header;
+    SharedPreferences sharedpreferences ;
 
     public VolleyAPICallJsonObject(Context context, String JsonURL) {
         this.JsonURL = JsonURL;
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         header = new HashMap<>();
-
+        sharedpreferences = context.getSharedPreferences("UserDetails", 0);
     }
 
     public VolleyAPICallJsonObject(Context context, String JsonURL,Map<String, String> header) {
@@ -40,6 +42,7 @@ public class VolleyAPICallJsonObject {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         this.header = header;
+        sharedpreferences = context.getSharedPreferences("UserDetails", 0);
 
     }
 
@@ -65,6 +68,7 @@ public class VolleyAPICallJsonObject {
                 public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers1 = new HashMap<String, String>();
                 headers1.put("Content-Type", "application/json; charset=utf-8");
+                headers1.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
 
                 return headers1;
             }

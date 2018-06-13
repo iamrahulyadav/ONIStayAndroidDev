@@ -62,13 +62,8 @@ public class Login_page extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phone_number = login_editText.getText().toString();
-                if(checkValidation(phone_number)) {
-                    registerNumber(phone_number,"");
-                    //registerNumber(login_editText.getText().toString(),login_referalEditText.getText().toString());
-                    //openOTPPage();
-                    //checkAndRequestPermissions();
-                }
+                TokenApi();
+
             }
         });
         login_editText = findViewById(R.id.login_editText);
@@ -88,6 +83,41 @@ public class Login_page extends AppCompatActivity {
         //login_editText.setVisibility(View.INVISIBLE);
         //checkValidation();
     }
+
+    private void TokenApi() {
+        String url = "http://www.onistays.com/oni-endpoint/user/token";
+        VolleyAPICallJsonObject volleyAPICallJsonObject =  new VolleyAPICallJsonObject(this,url);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                Log.e("response",response.toString());
+                try {
+                    String Token = response.getString("token");
+                    editor.putString("TOKEN", Token);
+                    editor.apply();
+
+                    String phone_number = login_editText.getText().toString();
+                    if(checkValidation(phone_number)) {
+                        registerNumber(phone_number,"");
+                        //registerNumber(login_editText.getText().toString(),login_referalEditText.getText().toString());
+                        //openOTPPage();
+                        //checkAndRequestPermissions();
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+                Log.e("response",error.toString());
+            }
+        });
+
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -26,12 +27,14 @@ public class VolleyAPICall {
         Context context;
         RequestQueue requestQueue;
         private Map<String, String> header;
+    SharedPreferences sharedpreferences ;
 
 public VolleyAPICall(Context context, String JsonURL) {
         this.JsonURL = JsonURL;
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         header = new HashMap<>();
+        sharedpreferences = context.getSharedPreferences("UserDetails", 0);
 
     }
 
@@ -40,6 +43,7 @@ public VolleyAPICall(Context context, String JsonURL) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         this.header = header;
+        sharedpreferences = context.getSharedPreferences("UserDetails", 0);
 
     }
 
@@ -67,19 +71,19 @@ public VolleyAPICall(Context context, String JsonURL) {
             }
         }){
 
-//
-//            @Override
-//            public Map<String, String> getHeaders()  {
-//                HashMap<String, String> headers1 = new HashMap<String, String>();
-//               headers1.put("Content-Type", "application/json; charset=utf-8; application/x-www-form-urlencoded");
-//
-//                return headers1;
-//            }
-public String getBodyContentType() {
-    return "application/x-www-form-urlencoded;" ;
+
+            @Override
+            public Map<String, String> getHeaders()  {
+                HashMap<String, String> headers1 = new HashMap<String, String>();
+                headers1.put("Content-Type", "application/json; charset=utf-8; application/x-www-form-urlencoded");
+                headers1.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
+                return headers1;
+            }
+//        public String getBodyContentType() {
+//    return "application/x-www-form-urlencoded;" ;
 }
 
-        };
+        ;
         requestQueue.add(jsonArrayRequest);
 
     }
