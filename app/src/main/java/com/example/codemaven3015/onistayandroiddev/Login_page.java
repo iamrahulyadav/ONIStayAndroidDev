@@ -218,6 +218,7 @@ public class Login_page extends AppCompatActivity {
             editor.putString("USER_ID",responce.getString("uid"));
             editor.putString("GENDER",getValueFromResponseObj(responce.getJSONObject("field_gender")));
             editor.putString("DOB",getValueFromResponseObj(responce.getJSONObject("field_dob")));
+            editor.putString("ADDRESS",getValueFromResponseObjAdd(responce.getJSONObject("field_address")).toString());
             editor.commit();
             //openOTPPage();
             showCustomView(responce.getString("name"));
@@ -242,6 +243,17 @@ public class Login_page extends AppCompatActivity {
         }
 
     }
+    public JSONArray getValueFromResponseObjAdd(JSONObject obj){
+        JSONArray array = new JSONArray();
+        try {
+            array = obj.getJSONArray("und");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return array;
+
+    }
+
     public void showCustomView(final String name){
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
