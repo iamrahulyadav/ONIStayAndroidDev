@@ -2,6 +2,7 @@ package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     ImageView home_firstImage;
     ProgressBar progressBar;
     HashMap<String, String> cityId ;
+
 
 
 

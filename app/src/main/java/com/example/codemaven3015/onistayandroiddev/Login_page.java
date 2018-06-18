@@ -215,7 +215,7 @@ public class Login_page extends AppCompatActivity {
             editor.putString("NAME",responce.getString("name"));
             editor.putString("MAIL",responce.getString("mail"));
             editor.putString("CONTACT_NUMBER",login_editText.getText().toString());
-            editor.putString("USER_ID",responce.getString("uid"));
+            editor.putString(" ",responce.getString("uid"));
             editor.putString("GENDER",getValueFromResponseObj(responce.getJSONObject("field_gender")));
             editor.putString("DOB",getValueFromResponseObj(responce.getJSONObject("field_dob")));
             editor.putString("ADDRESS",getValueFromResponseObjAdd(responce.getJSONObject("field_address")).toString());
