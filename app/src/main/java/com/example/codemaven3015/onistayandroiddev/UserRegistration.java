@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
 
 public class UserRegistration extends AppCompatActivity {
 
@@ -38,6 +45,8 @@ public class UserRegistration extends AppCompatActivity {
     private ViewPager mViewPager;
     ImageButton backButton;
     String name = "";
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,8 @@ public class UserRegistration extends AppCompatActivity {
         name = getIntent().getStringExtra("NAME");
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        sharedpreferences = getApplicationContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedpreferences.edit();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -129,6 +140,27 @@ public class UserRegistration extends AppCompatActivity {
                         return newUserRegistration;
 
                     }else {
+
+//                        String url = "http://www.onistays.com/oni-endpoint/user/";
+//                        url = url + sharedpreferences.getString("USER_ID","");
+//
+//                        final VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(getApplicationContext(),url);
+//                        volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
+//                            @Override
+//                            public void getResponse(JSONObject response)
+//                            {
+//
+//                                Log.e("check",response.toString());
+//
+//
+//                            }
+//
+//                            @Override
+//                            public void getError(VolleyError error)
+//                            {
+//                                Log.e("log",error.toString());
+//                            }
+//                        });
 
                         UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
                         return userRegistrationProfile;

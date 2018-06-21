@@ -51,6 +51,7 @@ public class VolleyAPICallJsonObject {
     }
 
     public void executeRequest(int method, final VolleyAPICallJsonObject.VolleyCallback callback) {
+        Log.e("info",(new JSONObject(header)).toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, JsonURL,new JSONObject(header), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

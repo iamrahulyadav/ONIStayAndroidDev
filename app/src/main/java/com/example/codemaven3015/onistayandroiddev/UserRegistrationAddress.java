@@ -138,7 +138,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
                     city = cityEdit.getText().toString().trim();
                     Log.e("info",typeAddressRadioGroup.getCheckedRadioButtonId()+"");
 
-                    RadioButton radioButton = v.findViewById(typeAddressRadioGroup.getCheckedRadioButtonId());
+                    RadioButton radioButton = dialog.findViewById(typeAddressRadioGroup.getCheckedRadioButtonId());
                     address_type = radioButton.getText().toString();
                     header = new HashMap<>();
                     header.put("uid",sharedpreferences.getString("USER_ID",""));

@@ -67,7 +67,7 @@ public VolleyAPICall(Context context, String JsonURL) {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                 Log.e("ONI","INSIDE ERROR CALLBACK");
+                  Log.e("ONI","INSIDE ERROR CALLBACK");
             }
         }){
 
