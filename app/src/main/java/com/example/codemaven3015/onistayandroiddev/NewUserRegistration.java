@@ -99,11 +99,11 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
         editTextMobile.setFocusable(false);
         editTextMobile.setText(sharedpreferences.getString("CONTACT_NUMBER",""));
         editTextMobile.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                      showMessage("Info","Phone number cannot be changed");
-               }
-          }
+                                              @Override
+                                              public void onClick(View v) {
+                                                  showMessage("Info","Phone number cannot be changed");
+                                              }
+                                          }
         );
         editTextDoB = v.findViewById(R.id.editTextDoB);
         radioGroupGender = v.findViewById(R.id.radioGroupGender);
@@ -235,17 +235,17 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             }
         })
         {
-         @Override
+            @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-            HashMap<String, String> headers = new HashMap<String, String>();
-            headers.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
-            return headers;
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
+                return headers;
+            }
+
+
+
         }
-
-
-
-    }
-        ;
+                ;
         requestQueue.add(jsonObjectRequest);
 
     }

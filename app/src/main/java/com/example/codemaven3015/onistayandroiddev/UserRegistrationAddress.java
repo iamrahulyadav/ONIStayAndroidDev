@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +54,11 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
     SharedPreferences.Editor editor;
     SharedPreferences sharedpreferences;
 
+    Spinner citySpinner, stateSpinner;
+    ArrayList<String> stringArrayState;
+    ArrayList<String> stringArrayCity;
+    String spinnerStateValue, city;
+
 
     @Nullable
     @Override
@@ -66,6 +73,10 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         address_recycler_view.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"Address"));
         AddressAdapter addressAdapter = new AddressAdapter(getContext());
         address_recycler_view.setAdapter(addressAdapter);
+
+        ////Set Spinner
+        SetSpinner(view);
+
         imageView = view.findViewById(R.id.addAddress);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +87,22 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         return view;
 
     }
+
+    private void SetSpinner(View view)
+    {
+        citySpinner = view.findViewById(R.id.spinnerCity);
+        stateSpinner = view.findViewById(R.id.spinnerState);
+
+
+        //set city adapter
+
+
+//        final ArrayAdapter<String> adapterCity = new ArrayAdapter<String>(this, R.layout.spinnertextview, stringArrayCity);
+//        adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        citySpinner.setAdapter(adapterCity);
+
+    }
+
     public void addAdressClick(){
         final Dialog dialog = new Dialog(getContext(), android.R.style.Theme_Light);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -104,13 +131,14 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 if(checkValidation()){
-                    String address, pin_code, phone_number, state, city,address_type;
+                    String address, pin_code, phone_number, state, city,address_type,bool_default_add;
 
                     address = address1EditText.getText().toString().trim();
                     pin_code = pinCodeEditText.getText().toString().trim();
                     phone_number = phoneEditText.getText().toString().trim();
                     state = stateEdit.getText().toString().trim();
                     city = cityEdit.getText().toString().trim();
+
                     RadioButton radioButton = v.findViewById(typeAddressRadioGroup.getCheckedRadioButtonId());
                     address_type = radioButton.getText().toString();
                     header = new HashMap<>();
@@ -118,7 +146,11 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
                     header.put("address1",address);
                     header.put("city",city);
                     header.put("state",state);
+                    header.put("phone_number",phone_number);
+                    header.put("address_type",address_type);
                     header.put("pin_code",pin_code);
+                    header.put("bool_default_add","1");
+
 
                     setAddressApi();
                 }
@@ -136,7 +168,8 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
-                homeAddress();
+                Log.e("success",response.toString());
+                //homeAddress();
             }
 
             @Override

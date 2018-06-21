@@ -73,6 +73,9 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     ProgressBar progressBar;
     HashMap<String, String> cityId ;
 
+    SharedPreferences sharedpreferences;
+    SharedPreferences.Editor editor;
+
 
 
 
@@ -90,6 +93,8 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_home);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+        sharedpreferences = getApplicationContext().getSharedPreferences("UserDetails", 0);
+        editor = sharedpreferences.edit();
         setGridData();
         greeting_textView=findViewById(R.id.greeting_textView);
         menuBar_imgBtn=findViewById(R.id.menuBar_imgBtn);
@@ -534,14 +539,24 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     private void logoutApi()
     {
 
-        String url="http://www.onistays.com/oni-endpoint/user/logout";
+        String url="http://onistays.com/oni-endpoint/custom_logout";
         final VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url);
         volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response)
             {
 
-
+                editor.putString("TOKEN","");
+                editor.putString("CONTACT_NUMBER","");
+                editor.putString("NAME","");
+                editor.putString("MAIL","");
+                editor.putString("CONTACT_NUMBER","");
+                editor.putString("USER_ID","");
+                editor.putString("GENDER","");
+                editor.putString("DOB","");
+                editor.putString("ADDRESS","");
+      Intent intent=new Intent(getApplicationContext(),Login_page.class);
+      startActivity(intent);
 
 
             }

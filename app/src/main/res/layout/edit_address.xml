@@ -87,10 +87,11 @@
                 android:text="State"
                 android:textSize="@dimen/mediumFont" />
 
-            <EditText
-                android:id="@+id/stateEdit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/stateEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             <!--<Spinner-->
                 <!--android:id="@+id/spinnerState"-->
                 <!--android:layout_width="match_parent"-->

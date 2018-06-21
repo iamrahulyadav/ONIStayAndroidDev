@@ -59,19 +59,19 @@ public class UserRegistration extends AppCompatActivity {
         setBackClickListner();
 
     }
-public void setBackClickListner(){
-    backButton = findViewById(R.id.backButton);
-    backButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(UserRegistration.this,Home.class);
-            startActivity(i);
-        }
-    });
-}
+    public void setBackClickListner(){
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(UserRegistration.this,Home.class);
+                startActivity(i);
+            }
+        });
+    }
 
 
-   /**
+    /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
