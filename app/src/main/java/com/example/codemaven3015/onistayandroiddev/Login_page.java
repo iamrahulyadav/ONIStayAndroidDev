@@ -306,33 +306,46 @@ public class Login_page extends AppCompatActivity {
     }
 
     private void forgotApi() {
-        String url = "http://www.onistays.com/oni-endpoint-xml/user/request_new_password";
+        String url = "http://www.onistays.com/oni-endpoint/user/request_new_password";
         HashMap header1 = new HashMap<>();
-        header1.put("name", sharedpreferences.getString("MAIL", ""));
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        SimpleXmlRequest<result> simpleRequest = new SimpleXmlRequest<result>(Request.Method.POST, url, result.class, header1,
-                new Response.Listener<result>() {
-                    @Override
-                    public void onResponse(result response) {
-                        // response Object
-                        Log.e("response",response.toString());
-                        progressBar.setVisibility(View.GONE);
-                        showMessage("info","Check your email for reset new password");
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // error Object
-                        Log.e("error",error.toString());
-                        progressBar.setVisibility(View.GONE);
-                      showMessage("info","Check your email for reset new password");
-                    }
-                }
-        );
-        requestQueue.add(simpleRequest);
         progressBar.setVisibility(View.VISIBLE);
+        header1.put("name", sharedpreferences.getString("MAIL", ""));
+        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(this,url,header1);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
+
+                String result;
+                try {
+                    result= response.getString("scalar");
+                    Log.e("True",result);
+                    if(result.equals("true"))
+                    {
+                       showMessage("Info","Please check your registered Email id for reset password link.");
+
+                    }else {
+                        showMessage("Info","Sorry,Invalid Phone number." +
+                                "");
+                          }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
+
+                showMessage("Info","You have entered an invalid phone number or password");
+
+
+
+            }
+        });
+
+
     }
 
 
