@@ -108,13 +108,6 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.edit_address);
         final ImageView crossImageView = dialog.findViewById(R.id.crossImageView);
-        //final ImageView saveImageView = dialog.findViewById(R.id.saveImageView);
-        crossImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
         address1EditText=dialog.findViewById(R.id.address1EditText);
         pinCodeEditText=dialog.findViewById(R.id.pinCodeEditText);
         phoneEditText=dialog.findViewById(R.id.phoneEditText);
@@ -123,10 +116,15 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         typeAddressRadioGroup=dialog.findViewById(R.id.typeAddressRadioGroup);
         homeRadio=dialog.findViewById(R.id.homeRadio);
         officeRadio=dialog.findViewById(R.id.officeRadio);
-
-
-
         save=dialog.findViewById(R.id.save);
+        //final ImageView saveImageView = dialog.findViewById(R.id.saveImageView);
+        crossImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +136,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
                     phone_number = phoneEditText.getText().toString().trim();
                     state = stateEdit.getText().toString().trim();
                     city = cityEdit.getText().toString().trim();
+                    Log.e("info",typeAddressRadioGroup.getCheckedRadioButtonId()+"");
 
                     RadioButton radioButton = v.findViewById(typeAddressRadioGroup.getCheckedRadioButtonId());
                     address_type = radioButton.getText().toString();
@@ -162,7 +161,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
     private void setAddressApi()
     {
-        String url = "http://www.onistays.com/oni-endpoint/user/login";
+        String url = "http://www.onistays.com/oni-endpoint/address-service/load";
 
         final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(getContext(),url,header);
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {

@@ -1026,7 +1026,6 @@
             </LinearLayout>
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/bookNowButton"
                 android:layout_width="260dp"
                 android:layout_height="35dp"
@@ -1036,15 +1035,18 @@
                 android:text="BOOK NOW"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/largeFont" />
+                android:textSize="@dimen/largeFont"
+                android:visibility="visible" />
+
             <in.shadowfax.proswipebutton.ProSwipeButton
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:id="@+id/awesome_btn"
                 android:layout_width="260dp"
-                android:layout_gravity="center"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:layout_margin="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"
                 app:bg_color="@color/red"
                 app:btn_text="BOOK NOW" />
         </LinearLayout>

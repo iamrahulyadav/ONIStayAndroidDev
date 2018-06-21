@@ -70,6 +70,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
     String[] country = { "Select","Month", "3 Months", "6 Months", "9 Months", "12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
+    String nid = "", booked_rooms,total_rooms;
+    int empty_rooms=0;
+
 
 
 
@@ -105,6 +108,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
         setDataToDetailPage();
         setFavButton();
+        setOnclickBookNowButton();
 
         setOnClickbuttonOccupany();
         onSwipeBookNowClick();
@@ -151,7 +155,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
         ////Spinner for occupancy
         occupancy=findViewById(R.id.occupancy);
-        bed=findViewById(R.id.bed);
+
 
 
 
@@ -162,6 +166,24 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
 
+    }
+
+    private void setOnclickBookNowButton() {
+        bookNowButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dateIn = getDropIn_textView.getText().toString();
+                String dateOut = getDropOut_textView.getText().toString();
+                if(dateIn.equals("")){
+                    showMessage("Error","Please select check-in date");
+                }else if(dateOut.equals("")){
+                    showMessage("Error","Please select check-out date");
+                }
+                Intent intent=new Intent(getApplicationContext(),PayNow.class);
+                intent.putExtra("NID",nid);
+            }
+
+        });
     }
 
     public void setPager(ArrayList<String> arrayImage){
@@ -210,6 +232,19 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject = new JSONObject(details);
+            nid=jsonObject.getString("Nid");
+            total_rooms=jsonObject.getString("Total Number of Rooms");
+            booked_rooms=jsonObject.getString("Booked Rooms");
+            int t_room=0,b_room=0;
+            try {
+                t_room = Integer.parseInt(total_rooms);
+                b_room = Integer.parseInt(booked_rooms);
+
+            } catch(NumberFormatException nfe) {
+                // Handle parse error.
+            }
+            empty_rooms=t_room-b_room;
+            setDropDownRoom(empty_rooms);
             hotel_textView.setText(jsonObject.getString("title"));
             address_textView.setText(jsonObject.getString("Address"));
             amountPrice.setText(jsonObject.getString("Currency Symbol") + jsonObject.getString("Price"));
@@ -256,6 +291,18 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setDropDownRoom(int empty_rooms)
+    {
+        Integer[] items = new Integer[empty_rooms];
+        for(int i=1;i<=empty_rooms;i++)
+        {
+            items[i-1]=i;
+        }
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, items);
+        bed=findViewById(R.id.bed);
+        bed.setAdapter(adapter);
     }
 
     private void setServicesData(JSONArray serviceArray) throws JSONException {
@@ -541,9 +588,10 @@ public void navigateToView(){
         getDropIn_textView.setText(
                 new StringBuilder()
                         // Month is 0 based so add 1
-                        .append(mDay).append("-")
+                        .append(mYear).append("-")
                         .append(mMonth + 1).append("-")
-                        .append(mYear).append(" "));
+                        .append(mDay).append(" "));
+
     }
 
     // the callback received when the user "sets" the date in the dialog
