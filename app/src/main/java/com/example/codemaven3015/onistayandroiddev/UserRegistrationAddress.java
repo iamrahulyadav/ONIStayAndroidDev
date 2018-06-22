@@ -18,21 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import  org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,8 +67,9 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         editor = sharedpreferences.edit();
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
         address_recycler_view.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"Address"));
-        AddressAdapter addressAdapter = new AddressAdapter(getContext());
-        address_recycler_view.setAdapter(addressAdapter);
+        //AddressAdapter addressAdapter = new AddressAdapter(getContext());
+        //address_recycler_view.setAdapter(addressAdapter);
+        setExistingAddress();
 
         ////Set Spinner
         SetSpinner(view);
@@ -87,6 +84,50 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         return view;
 
     }
+
+    private void setExistingAddress() {
+
+        String add = sharedpreferences.getString("ADDRESS","");
+        if(!add.equals("")){
+            try {
+                JSONArray addressArray = new JSONArray(add);
+                for(int i=0;i<addressArray.length();i++){
+                    JSONObject jsonObject=new JSONObject();
+                    jsonObject=addressArray.getJSONObject(i);
+                    String fc_id=jsonObject.getString("value");
+                    serviceCallToGetAddressDetails(fc_id);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void serviceCallToGetAddressDetails(final String fc_id)
+    {
+        String url="http://www.onistays.com/oni-endpoint/address-service/load";
+        header=new HashMap<>();
+        header.put("fc_id",fc_id);
+        VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(getContext(),url,header);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                try {
+                    JSONObject jsonObject=response.getJSONObject(fc_id);
+                    AddressAdapter addressAdapter = new AddressAdapter(getContext(),jsonObject);
+                    address_recycler_view.setAdapter(addressAdapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+
+            }
+        });
+    }
+
 
     private void SetSpinner(View view)
     {
@@ -149,9 +190,10 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
                     header.put("address_type",address_type);
                     header.put("pin_code",pin_code);
                     header.put("bool_default_add","1");
+                    header.put("fc_id","");
 
 
-                    setAddressApi();
+                    setAddressApi( dialog);
                 }
             }
 
@@ -159,28 +201,36 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         dialog.show();
     }
 
-    private void setAddressApi()
+    private void setAddressApi(final Dialog dialog)
     {
-        String url = "http://www.onistays.com/oni-endpoint/address-service/load";
+        String url = "http://www.onistays.com/oni-endpoint/address-service/create-update";
 
         final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(getContext(),url,header);
         volleyAPICallJsonObject1.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
             @Override
             public void getResponse(JSONObject response) {
                 Log.e("success",response.toString());
+                    dialog.hide();
+                    setNewlyUpdated(response);
                 //homeAddress();
             }
 
             @Override
             public void getError(VolleyError error) {
+                Log.e("error ",error.toString()+"checkingerror");
+                showMessage("Info","Please try again later");
 
-                showMessage("Info","Try again!!!!!");
 
                 //showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
                 //showAlertMessage.showMessage();
 
             }
         });
+    }
+
+    private void setNewlyUpdated(JSONObject response) {
+        AddressAdapter addressAdapter = new AddressAdapter(getContext(),response);
+        address_recycler_view.setAdapter(addressAdapter);
     }
 
     private boolean checkValidation()
@@ -206,12 +256,15 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
 
     public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
+        private JSONObject jsonObject;
         private Context context;
 
 
-        public AddressAdapter(Context context) {
+        public AddressAdapter(Context context,JSONObject jsonObject ) {
             this.context = context;
+            this.jsonObject = jsonObject;
         }
+
 
         private String[] address = {"Chapter One",
                 "Chapter Two",
@@ -222,11 +275,18 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView address_textView;
+            public TextView  address_textView,address1,address2,address3,address4,address5;
             public ImageView menuImage;
             public ViewHolder(View itemView) {
                 super(itemView);
                 address_textView = (TextView) itemView.findViewById(R.id.textAddressHeader);
+
+                address1 = (TextView) itemView.findViewById(R.id.address1);
+                address2 = (TextView) itemView.findViewById(R.id.address2);
+                address3 = (TextView) itemView.findViewById(R.id.address3);
+                address4 = (TextView) itemView.findViewById(R.id.address4);
+                address5 = (TextView) itemView.findViewById(R.id.address5);
+
                 menuImage = itemView.findViewById(R.id.menuAddressimage);
                 menuImage.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -305,12 +365,39 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
        }
         public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            viewHolder.address_textView.setText(address[i]);
+
+            viewHolder.address_textView.setText("Address "+(i+1));
+            try {
+                JSONObject jsonAddress= jsonObject.getJSONObject("field_user_p_address");
+                JSONArray jsonArray =jsonAddress.getJSONArray("und");
+                JSONObject jsonAddressDetail= jsonArray.getJSONObject(0);
+
+                viewHolder.address1.setText(jsonAddressDetail.getString("thoroughfare"));
+                viewHolder.address2.setText(jsonAddressDetail.getString("locality"));
+                viewHolder.address3.setText(jsonAddressDetail.getString("administrative_area")+" "+jsonAddressDetail.getString("postal_code"));
+
+                jsonAddress=jsonObject.getJSONObject("field_phone_no");
+                jsonArray=jsonAddress.getJSONArray("und");
+                jsonAddressDetail=jsonArray.getJSONObject(0);
+
+                viewHolder.address4.setText(jsonAddressDetail.getString("value"));
+
+                jsonAddress=jsonObject.getJSONObject("field_address_type");
+                jsonArray=jsonAddress.getJSONArray("und");
+                jsonAddressDetail=jsonArray.getJSONObject(0);
+
+                viewHolder.address5.setText(jsonAddressDetail.getString("value"));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
         @Override
         public int getItemCount() {
-            return address.length;
+            return 1;
         }
     }
 

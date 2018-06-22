@@ -140,28 +140,7 @@ public class UserRegistration extends AppCompatActivity {
                         return newUserRegistration;
 
                     }else {
-
-//                        String url = "http://www.onistays.com/oni-endpoint/user/";
-//                        url = url + sharedpreferences.getString("USER_ID","");
-//
-//                        final VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(getApplicationContext(),url);
-//                        volleyAPICallJsonObject.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
-//                            @Override
-//                            public void getResponse(JSONObject response)
-//                            {
-//
-//                                Log.e("check",response.toString());
-//
-//
-//                            }
-//
-//                            @Override
-//                            public void getError(VolleyError error)
-//                            {
-//                                Log.e("log",error.toString());
-//                            }
-//                        });
-
+//////////////////////
                         UserRegistrationProfile userRegistrationProfile = new UserRegistrationProfile();
                         return userRegistrationProfile;
                     }

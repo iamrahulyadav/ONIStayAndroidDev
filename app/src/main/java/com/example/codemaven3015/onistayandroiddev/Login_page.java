@@ -94,7 +94,7 @@ public class Login_page extends AppCompatActivity {
                 try {
                     String Token = response.getString("token");
                     editor.putString("TOKEN", Token);
-                    editor.apply();
+                    editor.commit();
 
                     String phone_number = login_editText.getText().toString();
                     if(checkValidation(phone_number)) {

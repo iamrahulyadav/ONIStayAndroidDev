@@ -1,27 +1,36 @@
 package com.example.codemaven3015.onistayandroiddev;
-import android.content.ContentResolver;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.text.TextUtils;
-import android.util.Patterns;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -53,6 +62,29 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
         sharedPreferences = getContext().getSharedPreferences("UserDetails", 0);
         editor = sharedPreferences.edit();
 
+        String url = "http://www.onistays.com/oni-endpoint/user/";
+        url = url+sharedPreferences.getString("USER_ID","");
+
+        final VolleyAPICallJsonObject volleyAPICallJsonObject1 = new VolleyAPICallJsonObject(getContext(),url);
+        volleyAPICallJsonObject1.executeRequest(Request.Method.GET, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response) {
+                Log.e("success1",response.toString());
+                saveAddressFcId(response);
+
+                //homeAddress();
+            }
+
+            @Override
+            public void getError(VolleyError error) {
+                Log.e("error2",error.toString()+"checkingerror");
+
+
+                //showAlertMessage showAlertMessage = new showAlertMessage(getApplicationContext(),"You have entered an invalid phone number or password","Info");
+                //showAlertMessage.showMessage();
+
+            }
+        });
 
         editTextFirstName.setText(sharedPreferences.getString("NAME",""));
         editTextLastName.setText(" ");
@@ -65,6 +97,19 @@ public class UserRegistrationProfile extends android.support.v4.app.Fragment {
             radioGroupGender.check(R.id.radioMale);
         }
 
+    }
+
+    private void saveAddressFcId(JSONObject response) {
+
+        try {
+            JSONObject jsonObject=response.getJSONObject("field_address");
+            JSONArray jsonArray=jsonObject.getJSONArray("und");
+            //ArrayList<String> arrayListDemo = new ArrayListDemo<String>();
+            editor.putString("ADDRESS",jsonArray.toString());
+            editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setWidgets(View v){

@@ -66,7 +66,7 @@ public class VolleyAPICallJsonObject {
         }){
 
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
+                public Map<String, String> getHeaders() {
                 HashMap<String, String> headers1 = new HashMap<String, String>();
                 headers1.put("Content-Type", "application/json; charset=utf-8");
                 headers1.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
