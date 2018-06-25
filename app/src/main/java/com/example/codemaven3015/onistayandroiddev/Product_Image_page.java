@@ -43,6 +43,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -80,7 +81,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product__image_page);
-        //bookingApi();
+        bed=findViewById(R.id.bed);
+        getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
+        getMonth_textView=findViewById(R.id.getMonth_textView);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         headerText = findViewById(R.id.headerText);
@@ -106,6 +109,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         rating_imgbtn = findViewById(R.id.rating_imgbtn);
 
 
+
+
         setDataToDetailPage();
         setFavButton();
         setOnclickBookNowButton();
@@ -120,14 +125,6 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
 
-        bookNowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Product_Image_page.this,PayNow.class);
-                startActivity(i);
-                //viewDialogue();
-            }
-        });
 
 //for STAY DURATION
         setDurationSpinner();
@@ -167,20 +164,37 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         });
 
     }
+//    final String months=getMonth_textView.getText().toString();
+//    final String no_of_rooms = bed.getSelectedItem().toString();
+//    final String dateIn = getDropIn_textView.getText().toString();
+//    final String dateOut = getDropOut_textView.getText().toString();
+
 
     private void setOnclickBookNowButton() {
         bookNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dateIn = getDropIn_textView.getText().toString();
-                String dateOut = getDropOut_textView.getText().toString();
+//
+              final String months=getMonth_textView.getText().toString();
+               final String no_of_rooms = bed.getSelectedItem().toString();
+                final String dateIn = getDropIn_textView.getText().toString();
+                final String dateOut = getDropOut_textView.getText().toString();
                 if(dateIn.equals("")){
                     showMessage("Error","Please select check-in date");
                 }else if(dateOut.equals("")){
                     showMessage("Error","Please select check-out date");
-                }
-                Intent intent=new Intent(getApplicationContext(),PayNow.class);
-                intent.putExtra("NID",nid);
+                }else {
+                    header = new HashMap<>();
+                    header.put("nid",nid);
+                    header.put("no_of_rooms",no_of_rooms);
+                    header.put("bookingDate",dateIn);
+                    header.put("bookingEndDate",dateOut);
+                    header.put("confirm","1");
+
+                confirmBookingApi();
+//                Intent intent=new Intent(getApplicationContext(),PayNow.class);
+//                intent.putExtra("NID",nid);
+            }
             }
 
         });
@@ -293,6 +307,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         }
     }
 
+
+
+
     private void setDropDownRoom(int empty_rooms)
     {
         Integer[] items = new Integer[empty_rooms];
@@ -303,7 +320,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_item, items);
         bed=findViewById(R.id.bed);
         bed.setAdapter(adapter);
+        String no_of_rooms = bed.getSelectedItem().toString();
     }
+
+
+
 
     private void setServicesData(JSONArray serviceArray) throws JSONException {
         for(int i = 0; i< serviceArray.length();i++){
@@ -363,25 +384,15 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         }
     }
 
-    private void bookingApi()
-    {
-        String url="http://www.onistays.com/bookinf/api/1.1/booking_home";
-        VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url);
-        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
-            @Override
-            public void getResponse(JSONObject response) {
 
-            }
 
-            @Override
-            public void getError(VolleyError error) {
 
-            }
-        });
-    }
+
+
+
 
     public void setDurationSpinner(){
-        getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
+
         getMonth_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -446,6 +457,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         getMonth_Spinner.setAdapter(aa);
     }
 
+
+
+
+
+
     private void setFavButton()
     {
         final ImageButton fav_imageBtn =(ImageButton)findViewById(R.id.fav_imageBtn);
@@ -474,6 +490,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
     }
 
+
+
+
+
+
     public void onSwipeBookNowClick(){
         final ProSwipeButton proSwipeBtn = (ProSwipeButton) findViewById(R.id.awesome_btn);
         proSwipeBtn.setOnSwipeListener(new ProSwipeButton.OnSwipeListener() {
@@ -494,6 +515,10 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
     }
+
+
+
+
     public void setOnClickbuttonOccupany(){
         buttonOccupany1 = findViewById(R.id.doubleButton);
         buttonOccupany1.setOnClickListener(new View.OnClickListener() {
@@ -509,6 +534,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
     }
+
+
+
     public void setOnEyeClick(){
         show_imageBtn = findViewById(R.id.show_imageBtn);
         show_imageBtn.setOnClickListener(new View.OnClickListener() {
@@ -518,12 +546,18 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             }
         });
     }
+
+
+
 public void navigateToView(){
     Intent i = new Intent(Product_Image_page.this,Site_Image_View.class);
     i.putExtra("IN_VIEW_IMAGE","true");
     i.putStringArrayListExtra("images", arrayImage);
     this.startActivity(i);
 }
+
+
+
     private void ratingView(View v) {
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = layoutInflater.inflate(R.layout.rating_box,null);
@@ -543,6 +577,8 @@ public void navigateToView(){
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 
     public class myTimerTask extends TimerTask {
         @Override
@@ -573,6 +609,8 @@ public void navigateToView(){
         }
         return null;
     }
+
+
     private void updateDisplayOut(int month, int year) {
         getDropOut_textView.setText(
                 new StringBuilder()
@@ -606,6 +644,9 @@ public void navigateToView(){
                     //updateDisplayOut();
                 }
             };
+
+
+
     public void showMessage(String title,String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -623,6 +664,39 @@ public void navigateToView(){
         });
         dialog1.show();
     }
+
+    private void confirmBookingApi()
+    {
+        String url="http://onistays.com/oni-endpoint/booking_home";
+
+        VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url,header);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response)
+            {
+                Intent intent= new Intent(getApplicationContext(),PayNow.class);
+                intent.putExtra("NID",nid);
+                intent.putExtra("DateIn",par)
+                intent.putExtra("DateIn",dateIn);
+                intent.putExtra("DateOut",dateOut);
+//                intent.putExtra("Total_Amount", Integer.parseInt(amountPrice) );
+                intent.putExtra("Stay_Period",months);
+//                intent.putExtra("Address", (CharSequence) address_textView);
+//
+//                intent.putExtra("Hotel_Name", (CharSequence) hotel_textView);
+//                startActivity(intent);
+            }
+
+            @Override
+            public void getError(VolleyError error)
+            {
+
+            }
+
+        });
+    }
+
+
 
 }
 

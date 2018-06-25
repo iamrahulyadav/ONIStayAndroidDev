@@ -64,7 +64,9 @@ public class PayNow extends AppCompatActivity {
         });
         textView();
         imageView();
+        setDataConfirmation();
     }
+
 
     private void imageView() {
 
@@ -184,5 +186,14 @@ public class PayNow extends AppCompatActivity {
             dialog.hide();
         }
     }
+
+    private void setDataConfirmation()
+
+    {
+        Intent intent=getIntent();
+
+
+    }
+
 
 }
