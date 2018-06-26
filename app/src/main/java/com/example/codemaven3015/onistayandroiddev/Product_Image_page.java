@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -674,22 +675,34 @@ public void navigateToView(){
             @Override
             public void getResponse(JSONObject response)
             {
-                Intent intent= new Intent(getApplicationContext(),PayNow.class);
-                intent.putExtra("NID",nid);
-                intent.putExtra("DateIn",dateIn);
-                intent.putExtra("DateOut",dateOut);
-                intent.putExtra("Total_Amount", amountPrice.getText());
-                intent.putExtra("Stay_Period",months);
-                intent.putExtra("Address", address_textView.getText());
+                Log.e("Success", "getResponse: "+response.toString() );
+                try {
+                    String scalar = response.getString("scalar");
+                    if(scalar.equals("Room(s) are available.")){
+                        Intent intent= new Intent(getApplicationContext(),PayNow.class);
+                        intent.putExtra("NID",nid);
+                        intent.putExtra("DateIn",dateIn);
+                        intent.putExtra("DateOut",dateOut);
+                        intent.putExtra("No_Of_Room",no_of_rooms);
+                        intent.putExtra("Total_Amount", amountPrice.getText());
+                        intent.putExtra("Stay_Period",months);
+                        intent.putExtra("Address", address_textView.getText());
+                        intent.putExtra("Hotel_Name", hotel_textView.getText());
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
 //
-                intent.putExtra("Hotel_Name", hotel_textView.getText());
-//                startActivity(intent);
             }
 
             @Override
             public void getError(VolleyError error)
             {
 
+                Log.e("error",error.toString());
             }
 
         });
