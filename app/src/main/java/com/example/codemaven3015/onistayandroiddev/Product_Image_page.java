@@ -71,7 +71,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
     String[] country = { "Select","Month", "3 Months", "6 Months", "9 Months", "12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
-    String nid = "", booked_rooms,total_rooms;
+    String nid = "", booked_rooms,total_rooms,no_of_rooms,dateIn,dateOut,months;
     int empty_rooms=0;
 
 
@@ -175,10 +175,10 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View v) {
 //
-              final String months=getMonth_textView.getText().toString();
-               final String no_of_rooms = bed.getSelectedItem().toString();
-                final String dateIn = getDropIn_textView.getText().toString();
-                final String dateOut = getDropOut_textView.getText().toString();
+              months=getMonth_textView.getText().toString();
+                no_of_rooms = bed.getSelectedItem().toString();
+                dateIn = getDropIn_textView.getText().toString();
+                dateOut = getDropOut_textView.getText().toString();
                 if(dateIn.equals("")){
                     showMessage("Error","Please select check-in date");
                 }else if(dateOut.equals("")){
@@ -676,14 +676,13 @@ public void navigateToView(){
             {
                 Intent intent= new Intent(getApplicationContext(),PayNow.class);
                 intent.putExtra("NID",nid);
-                intent.putExtra("DateIn",par)
                 intent.putExtra("DateIn",dateIn);
                 intent.putExtra("DateOut",dateOut);
-//                intent.putExtra("Total_Amount", Integer.parseInt(amountPrice) );
+                intent.putExtra("Total_Amount", amountPrice.getText());
                 intent.putExtra("Stay_Period",months);
-//                intent.putExtra("Address", (CharSequence) address_textView);
+                intent.putExtra("Address", address_textView.getText());
 //
-//                intent.putExtra("Hotel_Name", (CharSequence) hotel_textView);
+                intent.putExtra("Hotel_Name", hotel_textView.getText());
 //                startActivity(intent);
             }
 
