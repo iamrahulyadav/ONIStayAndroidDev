@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
@@ -118,8 +119,18 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
-        holder.hotel_image.setBackgroundResource(images[i]);
-        holder.cityName_textview.setText(city[i]);
+        try {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            holder.cityName_textview.setText("");
+            holder.address_textView.setText(jsonObject.getString("Title"));
+            holder.date_textView.setText(jsonObject.getString("Booking Start Date"));
+            holder.bookingDate_textView.setText(jsonObject.getString("Booking End Date"));
+            holder.hotel_image.setBackgroundResource(images[i]);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
