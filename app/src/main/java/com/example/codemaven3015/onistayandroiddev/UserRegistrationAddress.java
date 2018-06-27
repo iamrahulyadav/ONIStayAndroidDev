@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
     RadioButton homeRadio,officeRadio;
     RadioGroup typeAddressRadioGroup;
     Map<String, String> header;
+    ProgressDialog dialog;
 
     SharedPreferences.Editor editor;
     SharedPreferences sharedpreferences;
@@ -54,6 +56,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
     ArrayList<String> stringArrayState;
     ArrayList<String> stringArrayCity;
     String spinnerStateValue, city;
+    JSONArray addressArray;
 
 
     @Nullable
@@ -65,7 +68,9 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         address_recycler_view.setLayoutManager(rvLayoutManager);
         sharedpreferences = getContext().getSharedPreferences("UserDetails", 0);
         editor = sharedpreferences.edit();
+        dialog = new ProgressDialog(getContext());
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        addressArray = new JSONArray();
         address_recycler_view.addItemDecoration(new SpacesItemDecoration(spacingInPixels,"Address"));
         //AddressAdapter addressAdapter = new AddressAdapter(getContext());
         //address_recycler_view.setAdapter(addressAdapter);
@@ -91,11 +96,19 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         if(!add.equals("")){
             try {
                 JSONArray addressArray = new JSONArray(add);
+                Log.e("PrintAddress",addressArray.toString()+" "+addressArray.length());
                 for(int i=0;i<addressArray.length();i++){
+                    if(i==0){
+                        dialog.show();
+                    }
                     JSONObject jsonObject=new JSONObject();
                     jsonObject=addressArray.getJSONObject(i);
                     String fc_id=jsonObject.getString("value");
-                    serviceCallToGetAddressDetails(fc_id);
+                    if(i<(addressArray.length()-1)) {
+                        serviceCallToGetAddressDetails(fc_id,false );
+                    }else {
+                        serviceCallToGetAddressDetails(fc_id,true );
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -103,7 +116,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         }
     }
 
-    private void serviceCallToGetAddressDetails(final String fc_id)
+    private void serviceCallToGetAddressDetails(final String fc_id, final boolean flag)
     {
         String url="http://www.onistays.com/oni-endpoint/address-service/load";
         header=new HashMap<>();
@@ -114,8 +127,13 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
             public void getResponse(JSONObject response) {
                 try {
                     JSONObject jsonObject=response.getJSONObject(fc_id);
-                    AddressAdapter addressAdapter = new AddressAdapter(getContext(),jsonObject);
-                    address_recycler_view.setAdapter(addressAdapter);
+                    jsonObject.put("fc_id",fc_id);
+                    addressArray.put(jsonObject);
+                    if(flag) {
+                        dialog.hide();
+                        AddressAdapter addressAdapter = new AddressAdapter(getContext(), addressArray);
+                        address_recycler_view.setAdapter(addressAdapter);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -123,7 +141,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
             @Override
             public void getError(VolleyError error) {
-
+                dialog.hide();
             }
         });
     }
@@ -229,7 +247,8 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
     }
 
     private void setNewlyUpdated(JSONObject response) {
-        AddressAdapter addressAdapter = new AddressAdapter(getContext(),response);
+        addressArray.put(response);
+        AddressAdapter addressAdapter = new AddressAdapter(getContext(),addressArray);
         address_recycler_view.setAdapter(addressAdapter);
     }
 
@@ -256,13 +275,13 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
 
     public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
-        private JSONObject jsonObject;
+        private JSONArray jsonArray;
         private Context context;
 
 
-        public AddressAdapter(Context context,JSONObject jsonObject ) {
+        public AddressAdapter(Context context,JSONArray jsonArray ) {
             this.context = context;
-            this.jsonObject = jsonObject;
+            this.jsonArray = jsonArray;
         }
 
 
@@ -368,6 +387,8 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
 
             viewHolder.address_textView.setText("Address "+(i+1));
             try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject = jsonArray.getJSONObject(i);
                 JSONObject jsonAddress= jsonObject.getJSONObject("field_user_p_address");
                 JSONArray jsonArray =jsonAddress.getJSONArray("und");
                 JSONObject jsonAddressDetail= jsonArray.getJSONObject(0);
@@ -397,7 +418,7 @@ public class UserRegistrationAddress extends android.support.v4.app.Fragment {
         }
         @Override
         public int getItemCount() {
-            return 1;
+            return jsonArray.length();
         }
     }
 
