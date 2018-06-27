@@ -1,5 +1,6 @@
 package com.example.codemaven3015.onistayandroiddev;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -199,9 +200,12 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
                     .load(obj.getString("Thumbnail"))
                     .into(viewHolder.hotel_image);
             //viewHolder.product_textview.setText(productFeatureName[i]);
-            viewHolder.hotel_image.setBackgroundResource(R.drawable.hotel1);
+            //viewHolder.hotel_image.setBackgroundResource(R.drawable.hotel1);
             viewHolder.hotel_textView.setText(obj.getString("title"));
-            viewHolder.address_textView.setText(obj.getString("Address"));
+            String new_Address1,new_Address2;
+            new_Address1=obj.getString("Address");
+            new_Address2=new_Address1.replace("\r\n","");
+            viewHolder.address_textView.setText(new_Address2);
             JSONObject tempPrice = obj.getJSONObject("Price");
             JSONObject tempCurrencySymbol = obj.getJSONObject("Currency Symbol");
             viewHolder.cost_textView.setText(tempCurrencySymbol.getString("value") +" "+tempPrice.getString("value"));
@@ -246,6 +250,9 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
     public void startDetailsActivity(JSONObject jsonObject){
         Intent i=new Intent(context,Product_Image_page.class);
         i.putExtra("Details",jsonObject.toString());
+        i.putExtra("fromWhere",((Activity)context).getIntent().getStringExtra("fromWhere"));
+        i.putExtra("CITY",((Activity)context).getIntent().getStringExtra("CITY"));
+        i.putExtra("SEARCH",((Activity)context).getIntent().getStringExtra("SEARCH"));
         context.startActivity(i);
     }
     @Override

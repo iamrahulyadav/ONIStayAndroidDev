@@ -66,11 +66,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private int mDay;
     static final int DATE_DIALOG_ID = 0;
     LinearLayout SliderDots;
-    private int dotsCount;
+    private int dotsCount,Amount;
     private ImageView[]dots;
     private ImageButton getDropIn_imgBtn,rating_imgbtn;
     private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
-    String[] country = { "Select","Month", "3 Months", "6 Months", "9 Months", "12 Months"};
+    String[] country = { "Month", "3 Months", "6 Months", "9 Months", "12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
     String nid = "", booked_rooms,total_rooms,no_of_rooms,dateIn,dateOut,months;
     int empty_rooms=0;
@@ -122,6 +122,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Product_Image_page.this,Site_listView.class);
+                i.putExtra("fromWhere",getIntent().getStringExtra("fromWhere"));
+                i.putExtra("CITY",getIntent().getStringExtra("CITY"));
+                i.putExtra("SEARCH",getIntent().getStringExtra("SEARCH"));
                 startActivity(i);
             }
         });
@@ -176,7 +179,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             @Override
             public void onClick(View v) {
 //
-              months=getMonth_textView.getText().toString();
+              months=getMonth_Spinner.getSelectedItem().toString();
+                      //getMonth_textView.getText().toString();
                 no_of_rooms = bed.getSelectedItem().toString();
                 dateIn = getDropIn_textView.getText().toString();
                 dateOut = getDropOut_textView.getText().toString();
@@ -270,11 +274,11 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
             try {
                 myNum = Integer.parseInt(jsonObject.getString("Discount"));
                 price = Integer.parseInt(jsonObject.getString("Price"));
-                price = (price * 100) / (myNum);
+                Amount = (price * 100-myNum) / (100);
             } catch (NumberFormatException nfe) {
                 System.out.println("Could not parse " + nfe);
             }
-            youSaved.setText("You Saved " + jsonObject.getString("Currency Symbol") + price);
+            youSaved.setText("You Saved " + jsonObject.getString("Currency Symbol") + (price-Amount));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -408,6 +412,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                         switch (position){
                             //to update outTime
                             case 1:
+                                Amount = 3 * Amount;
+                                amountPrice.setText("₹ "+Amount);
                                 if(mMonth >10){
                                     updateDisplayOut(0,mYear+1);
                                 }else {
@@ -416,6 +422,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
                                 break;
                             case 2:
+                                Amount = 6 * Amount;
+                                amountPrice.setText("₹ "+Amount);
                                 if(mMonth >8){
                                     updateDisplayOut(11 - (mMonth +3),mYear+1);
                                 }else {
@@ -424,6 +432,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
 
                                 break;
                             case 3:
+                                Amount = 9 * Amount;
+                                amountPrice.setText("₹ "+Amount);
                                 if(mMonth >5){
 
                                     updateDisplayOut(11 - (mMonth +6),mYear+1);
@@ -432,6 +442,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
                                 }
                                 break;
                             case 4:
+                                Amount = 12 * Amount;
+                                amountPrice.setText("₹ "+Amount);
                                 if(mMonth >2){
                                     updateDisplayOut((11 - (mMonth +9)),mYear+1);
                                 }else {

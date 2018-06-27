@@ -202,6 +202,7 @@ public class Login_page extends AppCompatActivity {
                     editor.putString("CONTACT_NUMBER", login_editText.getText().toString());
                     editor.apply();
                     Intent i = new Intent(Login_page.this, Home.class);
+                    editor.putString("NAME","Guest");
                     i.putExtra("Name", "Guest");
                     startActivity(i);
                 }

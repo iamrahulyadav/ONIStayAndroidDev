@@ -136,14 +136,18 @@ public class Site_listView extends AppCompatActivity {
 
 
                 }else {
-                    adapter = new Card_layout(getApplicationContext(), "SiteList", response);
-                    int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
-                    recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels, "list"));
-                    recyclerView.setAdapter(adapter);
+                    callNextActivity(response);
                 }
             }
         });
 
+    }
+
+    private void callNextActivity(JSONArray response) {
+        adapter = new Card_layout(this, "SiteList", response);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.spacing);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels, "list"));
+        recyclerView.setAdapter(adapter);
     }
 
     public void bottomSheet(){

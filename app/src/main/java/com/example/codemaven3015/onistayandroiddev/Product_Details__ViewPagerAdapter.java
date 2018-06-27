@@ -71,7 +71,7 @@ class Product_Details__ViewPagerAdapter extends PagerAdapter {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    moveToImageSiteView();
+                    //moveToImageSiteView();
                 }
             });
         }

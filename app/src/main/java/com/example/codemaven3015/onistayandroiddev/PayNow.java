@@ -210,14 +210,14 @@ public class PayNow extends AppCompatActivity {
 
     {
         Intent intent = getIntent();
-        String nid=intent.getStringExtra("NID");
-        String dateIn=intent.getStringExtra("DateIn");
-        String dateOut=intent.getStringExtra("DateOut");
+         nid=intent.getStringExtra("NID");
+         dateIn=intent.getStringExtra("DateIn");
+         dateOut=intent.getStringExtra("DateOut");
         String amountPrice=intent.getStringExtra("Total_Amount");
         String months=intent.getStringExtra("Stay_Period");
         String address_textView=intent.getStringExtra("Address");
         String hotel_textView=intent.getStringExtra("Hotel_Name");
-        String no_of_rooms=intent.getStringExtra("No_Of_Room");
+         no_of_rooms=intent.getStringExtra("No_Of_Room");
 
         oder_id.setText(nid);
         textView9.setText(hotel_textView);
@@ -235,7 +235,7 @@ public class PayNow extends AppCompatActivity {
         header.put("no_of_rooms",no_of_rooms);
         header.put("bookingDate",dateIn);
         header.put("bookingEndDate",dateOut);
-        header.put("confirm","0");
+        //header.put("confirm","0");
 
         String url="http://onistays.com/oni-endpoint/booking_home";
 

@@ -113,6 +113,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                     Intent i = new Intent(Home.this, Site_listView.class);
                     i.putExtra("fromWhere", "search");
                     i.putExtra("SEARCH", searchbar.getQuery());
+                    i.putExtra("CITY", " ");
                     i.putExtra("UID", 0);
                     startActivity(i);
                 }
@@ -133,6 +134,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                     Intent i = new Intent(Home.this, Site_listView.class);
                     i.putExtra("fromWhere","search");
                     i.putExtra("SEARCH", query);
+                    i.putExtra("CITY", " ");
                     i.putExtra("UID", 0);
                     startActivity(i);
 
@@ -185,6 +187,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                     Intent i = new Intent(Home.this, Site_listView.class);
                     i.putExtra("fromWhere","city");
                     i.putExtra("CITY", selectedItem);
+                    i.putExtra("SEARCH", " ");
                     i.putExtra("UID", tid);
                     startActivity(i);
                 }
@@ -432,6 +435,9 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         int hours = c.get(Calendar.HOUR_OF_DAY);
         int min = c.get(Calendar.MINUTE);
         String name = getIntent().getStringExtra("Name");
+        if(name== null){
+            name = sharedpreferences.getString("NAME","");
+        }
 
         if(hours>=1 && hours<=12){
             //Toast.makeText(this, "Good Morning", Toast.LENGTH_SHORT).show();
@@ -459,7 +465,11 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menuItem = navigationView.getMenu();
         MenuItem profileMenuItem = menuItem.findItem(R.id.profile);
-        if (getIntent().getStringExtra("Name").toLowerCase().equals("guest")) {
+        String name = getIntent().getStringExtra("Name");
+        if(name== null){
+            name = sharedpreferences.getString("NAME","");
+        }
+        if (name.toLowerCase().equals("guest")) {
              profileMenuItem.setTitle("Registration");
         } else {
             profileMenuItem.setTitle("Profile");
@@ -502,7 +512,11 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         Intent i ;
         if (id == R.id.profile) {
             i = new Intent(Home.this,UserRegistration.class);
-            i.putExtra("NAME",getIntent().getStringExtra("Name"));
+            String name = getIntent().getStringExtra("Name");
+            if(name== null){
+                name = sharedpreferences.getString("NAME","");
+            }
+            i.putExtra("NAME",name);
             startActivity(i);
             // Handle the camera action
 
@@ -573,7 +587,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     //email permission check
     public void askPermissionForMail(){
         Contact_Us contact_us = new Contact_Us(this);
-        contact_us.emailNow("harpreet241608@gmail.com");
+        contact_us.emailNow("info@onistays.com");
     }
 
 
@@ -587,7 +601,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
             return;
         }else {
             Contact_Us contact_us = new Contact_Us(this);
-            contact_us.callNow("8882001245");
+            contact_us.callNow("7892599140");
         }
     }
     public void dealOnClick(View v){
@@ -603,7 +617,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     //startActivity(makeCall);
                     Contact_Us contact_us = new Contact_Us(this);
-                    contact_us.callNow("8882001245");
+                    contact_us.callNow("7892599140");
                 }
 
 
