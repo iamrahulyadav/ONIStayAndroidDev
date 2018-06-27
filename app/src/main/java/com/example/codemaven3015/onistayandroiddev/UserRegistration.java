@@ -76,6 +76,7 @@ public class UserRegistration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(UserRegistration.this,Home.class);
+                i.putExtra("Name",getIntent().getStringExtra("NAME"));
                 startActivity(i);
             }
         });
