@@ -1,5 +1,6 @@
 package com.example.codemaven3015.onistayandroiddev;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -7,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +19,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.security.auth.login.LoginException;
+
 public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.ViewHolder> {
     private Context context;
     private String name_activity;
+    JSONArray jsonArray=new JSONArray();
 
-    public Tabbed_CardLayout(Context context,String name_activity) {
+    public Tabbed_CardLayout(Context context,String name_activity,JSONArray jsonArray) {
         this.context = context;
         this.name_activity = name_activity;
+        this.jsonArray=jsonArray;
     }
 
     private int[] images = {R.drawable.hotel1, R.drawable.hotel2};
@@ -43,15 +55,20 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
 
             tabbed_layout=(LinearLayout)itemView.findViewById(R.id.tabbed_layout);
             book_btn=(Button)itemView.findViewById(R.id.book_btn);
-            if(name_activity.equals("Upcoming")){
-                book_btn.setText("Cancel");
+            if(name_activity.equals("Upcoming"))
+            {    book_btn.setText("Cancel");
                 book_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent i = new Intent(context,Cancled.class);
                         context.startActivity(i);
+
                     }
                 });
+
+
+
 
 
             }else if(name_activity.equals("Complete")){
@@ -59,8 +76,10 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
                 book_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         Intent i = new Intent(context,Site_listView.class);
                         context.startActivity(i);
+
                     }
                 });
 
@@ -72,6 +91,8 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
                     public void onClick(View v) {
                         Intent i = new Intent(context,Site_listView.class);
                         context.startActivity(i);
+
+
                     }
                 });
 
@@ -103,7 +124,7 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
 
     @Override
     public int getItemCount() {
-        return images.length;
+        return jsonArray.length();
     }
 
 

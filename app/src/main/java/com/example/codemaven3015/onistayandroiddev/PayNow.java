@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,16 +15,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.Inflater;
 
 public class PayNow extends AppCompatActivity {
     LinearLayout backApp_Bar,appmenuLL;
+    Map<String, String> header;
     Button EditBack_btn,payNowButton,cancelButton;
     ImageButton backButton;
     TextView headerText,oder_id,checkIn_Date,checkOut_Date,booking_date,stay_period,
-            total_amount,direction,call_property;
+            total_amount,direction,call_property,textView9,textView10;
     ImageView map,call,room_image;
     BottomSheetDialog dialog;
+    String nid,no_of_rooms,dateIn,dateOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,10 @@ public class PayNow extends AppCompatActivity {
         setContentView(R.layout.activity_pay_now);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        textView9=findViewById(R.id.textView9);
+        textView10=findViewById(R.id.textView10);
+
         headerText = findViewById(R.id.headerText);
         headerText.setText("Confirmation");
         appmenuLL = findViewById(R.id.appmenuLL);
@@ -51,8 +66,10 @@ public class PayNow extends AppCompatActivity {
         payNowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(PayNow.this,PayCard.class);
-                startActivity(i);
+
+
+
+                setPayButton();
             }
         });
         cancelButton = findViewById(R.id.cancelButton);
@@ -66,6 +83,8 @@ public class PayNow extends AppCompatActivity {
         imageView();
         setDataConfirmation();
     }
+
+
 
 
     private void imageView() {
@@ -190,10 +209,64 @@ public class PayNow extends AppCompatActivity {
     private void setDataConfirmation()
 
     {
-        Intent intent=getIntent();
+        Intent intent = getIntent();
+        String nid=intent.getStringExtra("NID");
+        String dateIn=intent.getStringExtra("DateIn");
+        String dateOut=intent.getStringExtra("DateOut");
+        String amountPrice=intent.getStringExtra("Total_Amount");
+        String months=intent.getStringExtra("Stay_Period");
+        String address_textView=intent.getStringExtra("Address");
+        String hotel_textView=intent.getStringExtra("Hotel_Name");
+        String no_of_rooms=intent.getStringExtra("No_Of_Room");
 
+        oder_id.setText(nid);
+        textView9.setText(hotel_textView);
+        textView10.setText(address_textView);
+        checkIn_Date.setText(dateIn);
+        checkOut_Date.setText(dateOut);
+        stay_period.setText(months);
+        total_amount.setText(amountPrice);
 
     }
+    private void setPayButton()
+    {
+        header = new HashMap<>();
+        header.put("nid",nid);
+        header.put("no_of_rooms",no_of_rooms);
+        header.put("bookingDate",dateIn);
+        header.put("bookingEndDate",dateOut);
+        header.put("confirm","0");
 
+        String url="http://onistays.com/oni-endpoint/booking_home";
+
+        VolleyAPICallJsonObject volleyAPICallJsonObject=new VolleyAPICallJsonObject(this,url,header);
+        volleyAPICallJsonObject.executeRequest(Request.Method.POST, new VolleyAPICallJsonObject.VolleyCallback() {
+            @Override
+            public void getResponse(JSONObject response)
+            {
+                Log.e("Success", "getResponse: "+response.toString() );
+//              try {
+//                    String scalar = response.getString("scalar");
+//                    if(scalar.equals("Room(s) are available.")){
+                        Intent intent= new Intent(getApplicationContext(),PayCard.class);
+                        startActivity(intent);
+
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+//
+            }
+
+            @Override
+            public void getError(VolleyError error)
+            {
+
+                Log.e("error",error.toString());
+            }
+
+        });
+    }
 
 }
