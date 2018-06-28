@@ -256,8 +256,10 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
         context.startActivity(i);
     }
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return list.length();
+
     }
 }
 

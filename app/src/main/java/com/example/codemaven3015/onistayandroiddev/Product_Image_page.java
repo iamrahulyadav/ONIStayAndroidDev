@@ -70,7 +70,7 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private ImageView[]dots;
     private ImageButton getDropIn_imgBtn,rating_imgbtn;
     private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
-    String[] country = { "Month", "3 Months", "6 Months", "9 Months", "12 Months"};
+    String[] country = { "Month","3 Months","6 Months","9 Months","12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
     String nid = "", booked_rooms,total_rooms,no_of_rooms,dateIn,dateOut,months;
     int empty_rooms=0;
@@ -83,9 +83,9 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product__image_page);
         bed=findViewById(R.id.bed);
-        getMonth_Spinner  = (Spinner) findViewById(R.id.getMonth_Spinner);
+        getMonth_Spinner  =findViewById(R.id.getMonth_Spinner);
         getMonth_textView=findViewById(R.id.getMonth_textView);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar =findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         headerText = findViewById(R.id.headerText);
         headerText.setText("Book Now");
@@ -628,9 +628,9 @@ public void navigateToView(){
         getDropOut_textView.setText(
                 new StringBuilder()
                         // Month is 0 based so add 1
-                        .append(mDay).append("-")
+                        .append(year).append("-")
                         .append(month + 1).append("-")
-                        .append(year).append(" "));
+                        .append(mDay).append(" "));
     }
 
 

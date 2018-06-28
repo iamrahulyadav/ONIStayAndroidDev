@@ -54,8 +54,8 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
 
             super(itemView);
 
-            tabbed_layout=(LinearLayout)itemView.findViewById(R.id.tabbed_layout);
-            book_btn=(Button)itemView.findViewById(R.id.book_btn);
+            tabbed_layout=itemView.findViewById(R.id.tabbed_layout);
+            book_btn=itemView.findViewById(R.id.book_btn);
             if(name_activity.equals("Upcoming"))
             {    book_btn.setText("Cancel");
                 book_btn.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +98,11 @@ public class Tabbed_CardLayout extends RecyclerView.Adapter<Tabbed_CardLayout.Vi
                 });
 
             }
-            cityName_textview=(TextView)itemView.findViewById(R.id.cityName_textview);
-            address_textView=(TextView)itemView.findViewById(R.id.address_textView);
-            date_textView=(TextView)itemView.findViewById(R.id.date_textView);
-            bookingDate_textView=(TextView)itemView.findViewById(R.id.bookingDate_textView);
-            hotel_image=(ImageView)itemView.findViewById(R.id.hotel_image);
+            cityName_textview=itemView.findViewById(R.id.cityName_textview);
+            address_textView=itemView.findViewById(R.id.address_textView);
+            date_textView=itemView.findViewById(R.id.date_textView);
+            bookingDate_textView=itemView.findViewById(R.id.bookingDate_textView);
+            hotel_image=itemView.findViewById(R.id.hotel_image);
 
 
         }
