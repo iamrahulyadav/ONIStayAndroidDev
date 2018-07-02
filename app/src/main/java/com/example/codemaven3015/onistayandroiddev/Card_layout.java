@@ -30,6 +30,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by Admin on 1/25/2018.
  */
@@ -58,19 +59,19 @@ public class Card_layout extends RecyclerView.Adapter<Card_layout.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            imgBg_relativeLayout=(RelativeLayout)itemView.findViewById(R.id.imgBg_relativeLayout) ;
+            imgBg_relativeLayout=itemView.findViewById(R.id.imgBg_relativeLayout) ;
             wish_butn=itemView.findViewById(R.id.wish_butn);
-            premium_Textview = (TextView) itemView.findViewById(R.id.premium_Textview);
-            price_textView = (TextView) itemView.findViewById(R.id.price_textView);
-            save_textView = (TextView) itemView.findViewById(R.id.save_textView);
-            cost_textView = (TextView) itemView.findViewById(R.id.cost_textView);
-            hotel_textView = (TextView) itemView.findViewById(R.id.hotel_textView);
-            address_textView = (TextView) itemView.findViewById(R.id.address_textView);
-            rate_textView = (TextView) itemView.findViewById(R.id.rate_textView);
-            rating_textView = (TextView) itemView.findViewById(R.id.rating_textView);
-            fav_imageBtn = (ImageButton) itemView.findViewById(R.id.fav_imageBtn);
-            show_imageBtn = (ImageButton) itemView.findViewById(R.id.show_imageBtn);
-            rating_imgbtn = (ImageButton) itemView.findViewById(R.id.rating_imgbtn);
+            premium_Textview =itemView.findViewById(R.id.premium_Textview);
+            price_textView =itemView.findViewById(R.id.price_textView);
+            save_textView =itemView.findViewById(R.id.save_textView);
+            cost_textView =itemView.findViewById(R.id.cost_textView);
+            hotel_textView =itemView.findViewById(R.id.hotel_textView);
+            address_textView =itemView.findViewById(R.id.address_textView);
+            rate_textView =itemView.findViewById(R.id.rate_textView);
+            rating_textView =itemView.findViewById(R.id.rating_textView);
+            fav_imageBtn =itemView.findViewById(R.id.fav_imageBtn);
+            show_imageBtn =itemView.findViewById(R.id.show_imageBtn);
+            rating_imgbtn =itemView.findViewById(R.id.rating_imgbtn);
             fav_imageBtn.setTag("blank");
             hotel_image=itemView.findViewById(R.id.hotel_image) ;
             hotel_image.setOnClickListener(new View.OnClickListener() {

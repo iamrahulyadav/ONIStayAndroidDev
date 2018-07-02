@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ONIStayAndroidDev</string>
+    <string name="app_name">Onistays</string>
     <string name="verify">5 Digit Verification Code Will be sent via SMS to verify your mobile number</string>
     <string name="sorry">Sorry!\n Incorrect Referal Code</string>
     <string name="referal">Having a Referal Code ?</string>
