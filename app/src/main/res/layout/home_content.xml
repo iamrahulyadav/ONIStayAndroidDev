@@ -68,6 +68,7 @@
                         android:background="@drawable/button_bg_color"
                         android:scaleType="fitCenter"
                         android:src="@drawable/location" />
+
                     <Button
                         android:id="@+id/searchBtn"
                         android:layout_width="90dp"
@@ -105,11 +106,12 @@
                         ></Spinner>
 
                     <ImageButton
+                        android:id="@+id/searchCityAndGenderBtn"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/badge_circle"
-                        android:paddingRight="10dp"
                         android:padding="10dp"
+                        android:paddingRight="10dp"
                         android:scaleType="fitCenter"
                         card_view:srcCompat="@drawable/red_search" />
                 </LinearLayout>

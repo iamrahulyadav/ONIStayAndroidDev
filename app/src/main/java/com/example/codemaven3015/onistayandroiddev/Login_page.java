@@ -295,6 +295,18 @@ public class Login_page extends AppCompatActivity {
                     header = new HashMap<>();
                     header.put("username",sharedpreferences.getString("NAME",""));
                     header.put("password",password);
+//                    editor.putString("TOKEN","");
+//                    editor.putString("CONTACT_NUMBER","");
+//                    editor.putString("NAME","");
+//                    editor.putString("MAIL","");
+//                    editor.putString("CONTACT_NUMBER","");
+//                    editor.putString("USER_ID","");
+//                    editor.putString("GENDER","");
+//                    editor.putString("DOB","");
+//                    editor.putString("ADDRESS","");
+//                    editor.commit();
+
+//                    editor.clear();
 
                     loginApiCall();
 

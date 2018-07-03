@@ -85,7 +85,7 @@
     </string-array>
 
     <string-array name="city">
-        <item>Cities</item>
+        <item>City</item>
         <item>Agra</item>
         <item>Ajmer</item>
         <item>Bareli</item>
@@ -97,8 +97,8 @@
 
     <string-array name="Search">
         <item>Gender</item>
-        <item>Boys</item>
-        <item>Girls</item>
+        <item>Female</item>
+        <item>Male</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="offer_onicredit">Benifits and offer on using Oni Credits.</string>

@@ -1,6 +1,7 @@
 package com.example.codemaven3015.onistayandroiddev;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,10 +14,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -60,7 +63,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     TextView greeting_textView;
     SearchView searchbar;
     GridView androidGridView;
-    ImageButton menuBar_imgBtn,notification_imgBtn;
+    ImageButton menuBar_imgBtn,notification_imgBtn,searchCityAndGenderBtn;
     DrawerLayout drawer;
     Button City_Btn,searchBtn;
     Menu menu;
@@ -72,7 +75,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
     ImageView home_firstImage;
     ProgressBar progressBar;
     HashMap<String, String> cityId ;
-
+    String gender = "",selectedCity;
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editor;
 
@@ -98,30 +101,34 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         setGridData();
         greeting_textView=findViewById(R.id.greeting_textView);
         menuBar_imgBtn=findViewById(R.id.menuBar_imgBtn);
+        searchCityAndGenderBtn=findViewById(R.id.searchCityAndGenderBtn);
 
         //search view
         searchBtn=findViewById(R.id.searchBtn);
+        searchbar=findViewById(R.id.searchbar);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(this, "Good Morning", Toast.LENGTH_SHORT).show();
-                if(searchbar.getQuery().equals("")) {
+                String text=searchbar.getQuery().toString();
+                if(text.equals("")) {
                     Toast.makeText(getApplicationContext(), "enter what you want to search", Toast.LENGTH_LONG).show();
                 }
                 else {
                     Intent i = new Intent(Home.this, Site_listView.class);
                     i.putExtra("fromWhere", "search");
-                    i.putExtra("SEARCH", searchbar.getQuery());
+                    i.putExtra("search", text);
                     i.putExtra("CITY", " ");
                     i.putExtra("UID", 0);
+                    i.putExtra("GENDER",gender);
                     startActivity(i);
                 }
             }
         });
 
-        searchbar=findViewById(R.id.searchbar);
+
         searchbar.setQueryHint("Where you want to stay");
+
         //EditText et= (EditText) findViewById(R.id.searchbar);
         //et.setHint("Where you want to stay");
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -133,9 +140,10 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
 
                     Intent i = new Intent(Home.this, Site_listView.class);
                     i.putExtra("fromWhere","search");
-                    i.putExtra("SEARCH", query);
+                    i.putExtra("search", query);
                     i.putExtra("CITY", " ");
                     i.putExtra("UID", 0);
+                    i.putExtra("GENDER",gender);
                     startActivity(i);
 
                 }
@@ -157,8 +165,13 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
             }
         });
 
-        // sppiner For Search & Cities
+        // sppiner For Gender
         SearchFor_sppiner=findViewById(R.id.SearchFor_sppiner);
+
+
+
+
+        // sppiner For Search & Cities
         searchCity_spinner=findViewById(R.id.searchCity_spinner);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -172,7 +185,55 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
         apiCallForofferImage();
         apiCalltogetCity();
         setOnClickCitySpinner();
+    setOnClickGenderSpinner();
+        setOnClicksearchCityAndGenderBtn();
         //updateMenuTitles();
+
+    }
+
+
+
+    private void setOnClicksearchCityAndGenderBtn() {
+        searchCityAndGenderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(gender.equals("")||selectedCity.equals("")){
+
+                    showMessage("Info","Please select Gender and City ");
+
+                }else {
+                    String tid = cityId.get(selectedCity);
+                    Intent i = new Intent(Home.this, Site_listView.class);
+                    i.putExtra("fromWhere", "city");
+                    i.putExtra("CITY", selectedCity);
+                    i.putExtra("search", "");
+                    i.putExtra("UID", tid);
+                    i.putExtra("GENDER", gender);
+                    startActivity(i);
+                }
+            }
+        });
+    }
+
+    private void setOnClickGenderSpinner() {
+
+        SearchFor_sppiner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position>0) {
+                    gender = parent.getItemAtPosition(position).toString();
+                }else{
+                    //showMessage("info","Please select Gender");
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                showMessage("info","Please select Gender");
+            }
+        });
+
 
     }
 
@@ -183,13 +244,20 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
                 if(position>=1) {
-                    String tid = cityId.get(selectedItem);
-                    Intent i = new Intent(Home.this, Site_listView.class);
-                    i.putExtra("fromWhere","city");
-                    i.putExtra("CITY", selectedItem);
-                    i.putExtra("SEARCH", " ");
-                    i.putExtra("UID", tid);
-                    startActivity(i);
+                    selectedCity = selectedItem.toLowerCase();
+                    if(gender.equals("")){
+                        showMessage("info","Please select Gender");
+                    }else {
+
+                        String tid = cityId.get(selectedItem);
+                        Intent i = new Intent(Home.this, Site_listView.class);
+                        i.putExtra("fromWhere", "city");
+                        i.putExtra("CITY", selectedCity);
+                        i.putExtra("search", "");
+                        i.putExtra("UID", tid);
+                        i.putExtra("GENDER",gender);
+                        startActivity(i);
+                    }
                 }
             }
 
@@ -569,6 +637,7 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
                 editor.putString("GENDER","");
                 editor.putString("DOB","");
                 editor.putString("ADDRESS","");
+                editor.commit();
       Intent intent=new Intent(getApplicationContext(),Login_page.class);
       startActivity(intent);
 
@@ -622,6 +691,23 @@ Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelecte
 
 
         }
+    }
+    public void showMessage(String title,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        //builder.set
+        builder.setMessage(message);
+        //builder.show();
+        AlertDialog dialog1 = builder.create();
+        dialog1.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Window view = ((AlertDialog)dialog).getWindow();
+                view.setBackgroundDrawableResource(R.color.white);
+            }
+        });
+        dialog1.show();
     }
 
 }

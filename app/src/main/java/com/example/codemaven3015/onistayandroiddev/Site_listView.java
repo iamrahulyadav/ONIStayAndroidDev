@@ -108,15 +108,28 @@ public class Site_listView extends AppCompatActivity {
     private void setDataToListView() {
         String url = "";
         dialog.show();
+        String gender = getIntent().getStringExtra("GENDER");
         if(getIntent().getStringExtra("fromWhere").equals("city")) {
             url  = "http://www.onistays.com/oni-endpoint/property-state?args[0]=";
             url = url + getIntent().getStringExtra("CITY");
             url=url+"&args[1]=''";
+            url = url+"&args[2]=";
+            if(gender.equals("")){
+                url = url+"''";
+            }else {
+                url = url+gender;
+            }
 
         }else{
-            url = "http://www.onistays.com/oni-endpoint/property-state?args[0]=''&args[1]=";
-            url = url + getIntent().getStringExtra("SEARCH");
-
+            url = "http://www.onistays.com/oni-endpoint/property-state?";
+            url = url +"args[0]="+ getIntent().getStringExtra("search");
+            url = url+"&args[1]=\'\'";
+            url=url+"&args[2]=";
+            if(gender.equals("")){
+                url = url+"''";
+            }else {
+                url = url+gender;
+            }
 
         }
 

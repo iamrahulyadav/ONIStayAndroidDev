@@ -43,6 +43,7 @@
                 android:layout_weight="1"
                 android:background="#ffffff"
                 android:paddingLeft="5dp"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/india_flag" />
 
             <TextView
