@@ -230,7 +230,8 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Log.e("ONI", "INSIDE ERROR CALLBACK");
+//                Log.e("ONI", "INSIDE ERROR CALLBACK");
+                Log.e("ONI", error.toString());
                 showMessage("Info","Email id or phone number already taken");
             }
         })
@@ -238,7 +239,8 @@ public class NewUserRegistration extends android.support.v4.app.Fragment {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
+//                headers.put("X-CSRF-Token",sharedpreferences.getString("TOKEN",""));
+                headers.put("Content-Type", "application/json");
                 return headers;
             }
 

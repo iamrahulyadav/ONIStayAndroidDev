@@ -69,7 +69,8 @@ public class Product_Image_page extends AppCompatActivity implements AdapterView
     private int dotsCount,Amount;
     private ImageView[]dots;
     private ImageButton getDropIn_imgBtn,rating_imgbtn;
-    private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,droppedPrice,address_textView,youSaved,amountPrice;
+    private TextView getDropIn_textView,getMonth_textView,getDropOut_textView,hotel_textView,
+            droppedPrice,address_textView,youSaved,amountPrice;
     String[] country = { "Month","3 Months","6 Months","9 Months","12 Months"};
     private Spinner getMonth_Spinner,occupancy,bed;
     String nid = "", booked_rooms,total_rooms,no_of_rooms,dateIn,dateOut,months;

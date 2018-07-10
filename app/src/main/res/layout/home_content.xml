@@ -223,10 +223,10 @@
                 android:textStyle="bold" />
 
             <include layout="@layout/deals_grid"
-                android:visibility="gone"
-                android:layout_below="@+id/textview_deals"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+            android:visibility="gone"
+            android:layout_below="@+id/textview_deals"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"/>
 
         </RelativeLayout>
     </ScrollView>
